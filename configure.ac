@@ -3,6 +3,7 @@
 
 AC_PREREQ([2.69])
 AC_INIT([cddlib], [0.94])
+AM_INIT_AUTOMAKE
 
 # Checks for programs.
 AC_PROG_CXX
@@ -13,6 +14,7 @@ AC_PROG_INSTALL
 AC_PROG_LN_S
 AC_PROG_MAKE_SET
 AC_PROG_RANLIB
+LT_INIT
 
 # Checks for libraries.
 AC_CHECK_LIB(gmp, main)
