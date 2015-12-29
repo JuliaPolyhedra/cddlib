@@ -32,3 +32,7 @@ testlp3_SOURCES                = testlp3.c
 LDADD        = ../lib-src/libcdd.la
 INCLUDES     = -I../lib-src
 AM_CPPFLAGS  = -UGMPRATIONAL
+# AM_CPPFLAGS is added before CPPFLAGS so
+# if -DGMPRATIONAL is in CPPFLAGS it is not removed.
+# However, AM_CFLAGS is added after CFLAGS so it has an effect
+AM_CFLAGS   = -UGMPRATIONAL
