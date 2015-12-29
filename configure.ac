@@ -1,29 +1,34 @@
-dnl Process this file with autoconf to produce a configure script.
+#                                               -*- Autoconf -*-
+# Process this file with autoconf to produce a configure script.
+
+AC_PREREQ([2.69])
 AC_INIT([cddlib], [0.94])
 
-dnl Init automake.
-AM_INIT_AUTOMAKE
-
-dnl Checks for programs.
+# Checks for programs.
+AC_PROG_CXX
+AC_PROG_AWK
 AC_PROG_CC
+AC_PROG_CPP
 AC_PROG_INSTALL
-LT_INIT
+AC_PROG_LN_S
+AC_PROG_MAKE_SET
+AC_PROG_RANLIB
 
-dnl Checks for libraries.
-dnl Replace `main' with a function in -lg:
-dnl AC_CHECK_LIB(g, main)
-dnl Replace `main' with a function in -lstdc:
-dnl AC_CHECK_LIB(stdc, main)
-dnl look for gmp:
+# Checks for libraries.
 AC_CHECK_LIB(gmp, main)
 
-dnl Checks for header files.
-AC_HEADER_STDC
+# Checks for header files.
+AC_CHECK_HEADERS([limits.h stdlib.h string.h])
 
-dnl Checks for typedefs, structures, and compiler characteristics.
-AC_C_CONST
+# Checks for typedefs, structures, and compiler characteristics.
 
-dnl Checks for library functions.
+# Checks for library functions.
+AC_FUNC_MALLOC
+AC_CHECK_FUNCS([strchr])
 
-AC_CONFIG_FILES([lib-src/Makefile src/Makefile lib-src-gmp/Makefile src-gmp/Makefile Makefile])
+AC_CONFIG_FILES([Makefile
+                 lib-src-gmp/Makefile
+                 lib-src/Makefile
+                 src-gmp/Makefile
+                 src/Makefile])
 AC_OUTPUT
