@@ -650,6 +650,19 @@ void ddf_CopyNormalizedArow(myfloat *acopy, myfloat *a, ddf_colrange d)
   ddf_Normalize(d,acopy);
 }
 
+void ddf_CopyAmatrixVectorizedByColumn(myfloat **Acopy, myfloat *A, ddf_rowrange m, ddf_colrange d)
+{
+  ddf_rowrange i;
+  ddf_colrange j;
+  ddf_bigrange I = 0;
+
+  for (j = 0; j < d; j++) {
+    for (i = 0; i < m; i++, I++) {
+      ddf_set(Acopy[i][j], A[I]);
+    }
+  }
+}
+
 void ddf_CopyAmatrix(myfloat **Acopy, myfloat **A, ddf_rowrange m, ddf_colrange d)
 {
   ddf_rowrange i;
@@ -686,6 +699,23 @@ void ddf_PermutePartialCopyAmatrix(myfloat **Acopy, myfloat **A, ddf_rowrange m,
   for (i = 1; i<= m; i++) {
     if (roworder[i]>0) ddf_CopyArow(Acopy[roworder[i]-1],A[i-1],d);
   }
+}
+
+// The three following functions seems trivial but they
+// are usefull when writing a wrapper
+void ddf_SetMatrixObjective(ddf_MatrixPtr M, ddf_LPObjectiveType objective)
+{
+  M->objective = objective;
+}
+
+void ddf_SetMatrixNumberType(ddf_MatrixPtr M, ddf_NumberType numbtype)
+{
+  M->numbtype = numbtype;
+}
+
+void ddf_SetMatrixRepresentationType(ddf_MatrixPtr M, ddf_RepresentationType representation)
+{
+  M->representation = representation;
 }
 
 void ddf_InitializeArow(ddf_colrange d,ddf_Arow *a)

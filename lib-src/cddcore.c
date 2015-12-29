@@ -650,6 +650,19 @@ void dd_CopyNormalizedArow(mytype *acopy, mytype *a, dd_colrange d)
   dd_Normalize(d,acopy);
 }
 
+void dd_CopyAmatrixVectorizedByColumn(mytype **Acopy, mytype *A, dd_rowrange m, dd_colrange d)
+{
+  dd_rowrange i;
+  dd_colrange j;
+  dd_bigrange I = 0;
+
+  for (j = 0; j < d; j++) {
+    for (i = 0; i < m; i++, I++) {
+      dd_set(Acopy[i][j], A[I]);
+    }
+  }
+}
+
 void dd_CopyAmatrix(mytype **Acopy, mytype **A, dd_rowrange m, dd_colrange d)
 {
   dd_rowrange i;
@@ -686,6 +699,23 @@ void dd_PermutePartialCopyAmatrix(mytype **Acopy, mytype **A, dd_rowrange m, dd_
   for (i = 1; i<= m; i++) {
     if (roworder[i]>0) dd_CopyArow(Acopy[roworder[i]-1],A[i-1],d);
   }
+}
+
+// The three following functions seems trivial but they
+// are usefull when writing a wrapper
+void dd_SetMatrixObjective(dd_MatrixPtr M, dd_LPObjectiveType objective)
+{
+  M->objective = objective;
+}
+
+void dd_SetMatrixNumberType(dd_MatrixPtr M, dd_NumberType numbtype)
+{
+  M->numbtype = numbtype;
+}
+
+void dd_SetMatrixRepresentationType(dd_MatrixPtr M, dd_RepresentationType representation)
+{
+  M->representation = representation;
 }
 
 void dd_InitializeArow(dd_colrange d,dd_Arow *a)
