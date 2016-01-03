@@ -21,7 +21,7 @@ AC_CONFIG_MACRO_DIR([m4])
 AC_CHECK_LIB(gmp, main)
 
 # Checks for header files.
-AC_CHECK_HEADERS([limits.h stdlib.h string.h])
+AC_CHECK_HEADERS([limits.h stdlib.h string.h gmp.h])
 
 # Checks for typedefs, structures, and compiler characteristics.
 
