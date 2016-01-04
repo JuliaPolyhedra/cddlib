@@ -2951,7 +2951,7 @@ ddf_rowset ddf_RedundantRowsViaShooting(ddf_MatrixPtr M, ddf_ErrorType *error)  
     } /* endwhile */
   } else {
     /* No interior point is found.  Apply the standard LP technique.  */
-    if (localdebug) printf("No interior-point is found and thus the standard LP technique will be used.\n", ired);
+    if (localdebug) printf("No interior-point is found and thus the standard LP technique will be used.\n");
     redset=ddf_RedundantRows(M, error);
   }
 
