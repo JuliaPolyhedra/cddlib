@@ -1,7 +1,7 @@
 /* Header file for setoper.c  */
 
-/* setoper.c: 
- * A set operation library 
+/* setoper.c:
+ * A set operation library
  * created by Komei Fukuda, Nov.14, 1993
  * last modified on June 1, 2000
  */

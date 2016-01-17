@@ -1,11 +1,11 @@
-/* cddtypes.h: Header file for cddlib.c 
+/* cddtypes.h: Header file for cddlib.c
    written by Komei Fukuda, fukuda@math.ethz.ch
    Version 0.94h, April 30, 2015
 */
 
 /* cddlib.c : C-Implementation of the double description method for
-   computing all vertices and extreme rays of the polyhedron 
-   P= {x :  b - A x >= 0}.  
+   computing all vertices and extreme rays of the polyhedron
+   P= {x :  b - A x >= 0}.
    Please read COPYING (GNU General Public Licence) and
    the manual cddlibman.tex for detail.
 */
@@ -18,7 +18,7 @@
 #define dd_DDVERSION   "Version 0.94g (March 23, 2012)"
 #include <time.h>
 
-#define dd_wordlenmax    1024 
+#define dd_wordlenmax    1024
 #define dd_linelenmax    4096
 #define dd_datawidth       10
 #define dd_filenamelen    255
@@ -34,8 +34,8 @@ typedef long dd_bigrange;
 
 typedef set_type dd_rowset;
 typedef set_type dd_colset;
-typedef long *dd_rowindex;   
-typedef int *dd_rowflag;   
+typedef long *dd_rowindex;
+typedef int *dd_rowflag;
 typedef long *dd_colindex;
 typedef mytype **dd_Amatrix;
 typedef mytype *dd_Arow;
@@ -96,11 +96,11 @@ typedef enum {
 
 typedef enum {
   dd_Auto, dd_SemiAuto, dd_Manual
-} dd_FileInputModeType;   
+} dd_FileInputModeType;
    /* Auto if a input filename is specified by command arguments */
 
 typedef enum {
-  dd_DimensionTooLarge, dd_ImproperInputFormat, 
+  dd_DimensionTooLarge, dd_ImproperInputFormat,
   dd_NegativeMatrixSize, dd_EmptyVrepresentation, dd_EmptyHrepresentation, dd_EmptyRepresentation,
   dd_IFileNotFound, dd_OFileNotOpen, dd_NoLPObjective, dd_NoRealNumberSupport,
   dd_NotAvailForH, dd_NotAvailForV, dd_CannotHandleLinearity,
@@ -133,7 +133,7 @@ typedef struct dd_lpsolution *dd_LPSolutionPtr;
 typedef struct dd_lpsolution {
   dd_DataFileType filename;
   dd_LPObjectiveType objective;
-  dd_LPSolverType solver; 
+  dd_LPSolverType solver;
   dd_rowrange m;
   dd_colrange d;
   dd_NumberType numbtype;
@@ -145,7 +145,7 @@ typedef struct dd_lpsolution {
   dd_colindex nbindex;  /* current basis represented by nonbasic indices */
   dd_rowrange re;  /* row index as a certificate in the case of inconsistency */
   dd_colrange se;  /* col index as a certificate in the case of dual inconsistency */
-  long pivots[5]; 
+  long pivots[5];
    /* pivots[0]=setup (to find a basis), pivots[1]=PhaseI or Criss-Cross,
       pivots[2]=Phase II, pivots[3]=Anticycling, pivots[4]=GMP postopt. */
   long total_pivots;
@@ -156,8 +156,8 @@ typedef struct dd_lpdata *dd_LPPtr;
 typedef struct dd_lpdata {
   dd_DataFileType filename;
   dd_LPObjectiveType objective;
-  dd_LPSolverType solver; 
-  dd_boolean Homogeneous;  
+  dd_LPSolverType solver;
+  dd_boolean Homogeneous;
      /* The first column except for the obj row is all zeros. */
   dd_rowrange m;
   dd_colrange d;
@@ -167,7 +167,7 @@ typedef struct dd_lpdata {
   dd_colrange rhscol;
   dd_NumberType numbtype;
   dd_rowrange eqnumber;  /* the number of equalities */
-  dd_rowset equalityset;  
+  dd_rowset equalityset;
 
   dd_boolean redcheck_extensive;  /* Apply the extensive redundancy check. */
   dd_rowrange ired; /* the row index for the redundancy checking */
@@ -186,7 +186,7 @@ typedef struct dd_lpdata {
   dd_colindex nbindex;  /* current basis represented by nonbasic indices */
   dd_rowrange re;  /* row index as a certificate in the case of inconsistency */
   dd_colrange se;  /* col index as a certificate in the case of dual inconsistency */
-  long pivots[5]; 
+  long pivots[5];
    /* pivots[0]=setup (to find a basis), pivots[1]=PhaseI or Criss-Cross,
       pivots[2]=Phase II, pivots[3]=Anticycling, pivots[4]=GMP postopt. */
   long total_pivots;
@@ -203,7 +203,7 @@ typedef struct dd_lpdata {
 typedef struct  dd_matrixdata *dd_MatrixPtr;
 typedef struct  dd_matrixdata {
   dd_rowrange rowsize;
-  dd_rowset linset; 
+  dd_rowset linset;
     /*  a subset of rows of linearity (ie, generators of
         linearity space for V-representation, and equations
         for H-representation. */
@@ -219,7 +219,7 @@ typedef struct dd_setfamily *dd_SetFamilyPtr;
 typedef struct dd_setfamily {
   dd_bigrange famsize;
   dd_bigrange setsize;
-  dd_SetVector set;  
+  dd_SetVector set;
 } dd_SetFamilyType;
 
 
@@ -248,17 +248,17 @@ typedef struct dd_polyhedradata {
   dd_colrange d_alloc; /* allocated col size of matrix A */
   dd_Arow c;           /* cost vector */
 
-  dd_rowflag EqualityIndex;  
+  dd_rowflag EqualityIndex;
     /* ith component is 1 if it is equality, -1 if it is strict inequality, 0 otherwise. */
 
   dd_boolean IsEmpty;  /* This is to tell whether the set is empty or not */
-  
+
   dd_boolean NondegAssumed;
   dd_boolean InitBasisAtBottom;
   dd_boolean RestrictedEnumeration;
   dd_boolean RelaxedEnumeration;
 
-  dd_rowrange m1; 
+  dd_rowrange m1;
     /* = m or m+1 (when representation=Inequality && !homogeneous)
        This data is written after dd_ConeDataLoad is called.  This
        determines the size of Ainc. */
@@ -266,14 +266,14 @@ typedef struct dd_polyhedradata {
     /* Indicates whether Ainc, Ared, Adom are all computed.
        All the variables below are valid only when this is TRUE */
   dd_colrange ldim;   /* linearity dimension */
-  dd_bigrange n; 
-    /* the size of output = total number of rays 
+  dd_bigrange n;
+    /* the size of output = total number of rays
        in the computed cone + linearity dimension */
   dd_Aincidence Ainc;
     /* incidence of input and output */
-  dd_rowset Ared;  
+  dd_rowset Ared;
     /* redundant set of rows whose removal results in a minimal system */
-  dd_rowset Adom;  
+  dd_rowset Adom;
     /* dominant set of rows (those containing all rays). */
 
 } dd_PolyhedraType;
@@ -298,17 +298,17 @@ typedef struct dd_conedata {
   unsigned int rseed;  /* random seed for random row permutation */
 
   dd_boolean ColReduced;  /* flag to indicate that a column basis is computed and reduced */
-  dd_bigrange LinearityDim;   
+  dd_bigrange LinearityDim;
            /*  the dimension of the linearity space (when input is H), and
                the size of a minimal system of equations to determine the space (when V). */
   dd_colrange d_orig;  /* the size d of the original matrix A */
   dd_colindex newcol;  /* the size d of the original matrix A */
-  
+
   dd_colindex InitialRayIndex;   /* InitialRayIndex[s] (s>=1) stores the corr. row index */
   dd_rowindex OrderVector;
   dd_boolean RecomputeRowOrder;
   dd_boolean PreOrderedRun;
-  dd_rowset GroundSet, EqualitySet, NonequalitySet, 
+  dd_rowset GroundSet, EqualitySet, NonequalitySet,
        AddedHalfspaces, WeaklyAddedHalfspaces, InitialHalfspaces;
   long RayCount, FeasibleRayCount, WeaklyFeasibleRayCount,
        TotalRayCount, ZeroRayCount;

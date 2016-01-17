@@ -1,11 +1,11 @@
-/* cdd.h: Header file for cddlib.c 
+/* cdd.h: Header file for cddlib.c
    written by Komei Fukuda, fukuda@math.ethz.ch
    Version 0.94h, April 30, 2015
 */
 
 /* cddlib.c : C-Implementation of the double description method for
-   computing all vertices and extreme rays of the polyhedron 
-   P= {x :  b - A x >= 0}.  
+   computing all vertices and extreme rays of the polyhedron
+   P= {x :  b - A x >= 0}.
    Please read COPYING (GNU General Public Licence) and
    the manual cddlibman.tex for detail.
 */
@@ -106,7 +106,7 @@ dd_rowset dd_RedundantRows(dd_MatrixPtr, dd_ErrorType *);  /* 092 */
 dd_boolean dd_SRedundant(dd_MatrixPtr, dd_rowrange, dd_Arow, dd_ErrorType *);  /* 093a */
 dd_rowset dd_SRedundantRows(dd_MatrixPtr, dd_ErrorType *);  /* 093a */
 dd_rowset dd_RedundantRowsViaShooting(dd_MatrixPtr, dd_ErrorType *); /* 092 */
-dd_rowrange dd_RayShooting(dd_MatrixPtr, dd_Arow intpt, dd_Arow direction);  /* 092 */ 
+dd_rowrange dd_RayShooting(dd_MatrixPtr, dd_Arow intpt, dd_Arow direction);  /* 092 */
  /* 092, find the first inequality "hit" by a ray from an intpt.  */
 dd_boolean dd_ImplicitLinearity(dd_MatrixPtr, dd_rowrange, dd_Arow, dd_ErrorType *);  /* 092 */
 dd_rowset dd_ImplicitLinearityRows(dd_MatrixPtr, dd_ErrorType *);  /* 092  */
@@ -155,7 +155,7 @@ void dd_WriteBmatrix(FILE *, dd_colrange, dd_Bmatrix T);
 void dd_WriteMatrix(FILE *, dd_MatrixPtr);
 void dd_MatrixIntegerFilter(dd_MatrixPtr);
 void dd_WriteReal(FILE *, mytype);
-void dd_WriteNumber(FILE *f, mytype x); 
+void dd_WriteNumber(FILE *f, mytype x);
     /* write a number depending on the arithmetic used.  */
 void dd_WritePolyFile(FILE *, dd_PolyhedraPtr);
 void dd_WriteRunningMode(FILE *, dd_PolyhedraPtr);
@@ -174,10 +174,10 @@ void dd_WriteInputIncidence(FILE *, dd_PolyhedraPtr);
 
 dd_LPPtr dd_Matrix2LP(dd_MatrixPtr, dd_ErrorType *);
   /* Load a matrix to create an LP object. */
-  
+
 dd_LPPtr dd_Matrix2Feasibility(dd_MatrixPtr, dd_ErrorType *);
   /* Load a matrix to create an LP object for feasibility (obj == 0) .*/  /*  094 */
-  
+
 dd_LPPtr dd_Matrix2Feasibility2(dd_MatrixPtr, dd_rowset, dd_rowset, dd_ErrorType *);
   /* Load a matrix to create an LP object for feasibility with additional equality and
    strict inequality constraints. */  /*  094 */
@@ -187,7 +187,7 @@ dd_boolean dd_LPSolve0(dd_LPPtr,dd_LPSolverType,dd_ErrorType *);
 void dd_CrissCrossSolve(dd_LPPtr lp,dd_ErrorType *);
 void dd_DualSimplexSolve(dd_LPPtr lp,dd_ErrorType *);
 
-dd_LPPtr dd_MakeLPforInteriorFinding(dd_LPPtr);  
+dd_LPPtr dd_MakeLPforInteriorFinding(dd_LPPtr);
 dd_LPSolutionPtr dd_CopyLPSolution(dd_LPPtr);  /* 0.90c */
 void dd_WriteLP(FILE *, dd_LPPtr); /* 092 */
 

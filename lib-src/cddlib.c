@@ -5,7 +5,7 @@
 */
 
 /* cdd : C-Implementation of the double description method for
-   computing all vertices and extreme rays of the polyhedron 
+   computing all vertices and extreme rays of the polyhedron
    P= {x :  b - A x >= 0}.
    Please read COPYING (GNU General Public Licence) and
    the manual cddlibman.tex for detail.
@@ -26,12 +26,12 @@
     Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-/* The first version C0.21 was created on November 10,1993 
-   with Dave Gillespie's p2c translator 
-   from the Pascal program pdd.p written by Komei Fukuda. 
+/* The first version C0.21 was created on November 10,1993
+   with Dave Gillespie's p2c translator
+   from the Pascal program pdd.p written by Komei Fukuda.
 */
 
-#include "setoper.h" 
+#include "setoper.h"
   /* set operation library header (Ver. June 1, 2000 or later) */
 #include "cdd.h"
 #include <stdio.h>
@@ -229,9 +229,9 @@ dd_boolean dd_CheckEmptiness(dd_PolyhedraPtr poly, dd_ErrorType *err)
 	poly->IsEmpty=dd_TRUE;
 	poly->child->CompStatus=dd_AllFound;
 	answer=dd_TRUE;
-	poly->child->Error=*err;  
+	poly->child->Error=*err;
   }
-  
+
   return answer;
 }
 
@@ -267,7 +267,7 @@ dd_boolean dd_DoubleDescription(dd_PolyhedraPtr poly, dd_ErrorType *err)
 	}
     time(&cone->endtime);
   }
-    
+
 _L99: ;
 
   return found;
@@ -305,7 +305,7 @@ dd_boolean dd_DoubleDescription2(dd_PolyhedraPtr poly, dd_RowOrderType horder, d
 	}
     time(&cone->endtime);
   }
-    
+
 _L99: ;
 
   return found;
@@ -380,7 +380,7 @@ dd_boolean dd_DDFile2File(char *ifile, char *ofile, dd_ErrorType *err)
     dd_FreePolyhedra(poly);
     dd_FreeMatrix(A);
     dd_FreeMatrix(G);
-  } 
+  }
 
 _L99: ;
   if (*err!=dd_NoError) dd_WriteErrorMessages(stderr,*err);

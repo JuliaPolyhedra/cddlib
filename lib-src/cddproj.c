@@ -4,8 +4,8 @@
 */
 
 /* cddlib : C-library of the double description method for
-   computing all vertices and extreme rays of the polyhedron 
-   P= {x :  b - A x >= 0}.  
+   computing all vertices and extreme rays of the polyhedron
+   P= {x :  b - A x >= 0}.
    Please read COPYING (GNU General Public Licence) and
    the manual cddlibman.tex for detail.
 */
@@ -70,7 +70,7 @@ dd_MatrixPtr dd_BlockElimination(dd_MatrixPtr M, dd_colset delset, dd_ErrorType 
     for (j = 1; j <= m; j++) {
       dd_set(Mdual->matrix[i-1][j], M->matrix[j-1][delindex[i]-1]);
     }
-  } 
+  }
 
   k=0;
   for (i = 1; i <= m; i++){
@@ -78,10 +78,10 @@ dd_MatrixPtr dd_BlockElimination(dd_MatrixPtr M, dd_colset delset, dd_ErrorType 
       /* set nonnegativity for the dual variable associated with
          each non-linearity inequality. */
       k++;
-      dd_set(Mdual->matrix[delsize+k-1][i], dd_one);  
+      dd_set(Mdual->matrix[delsize+k-1][i], dd_one);
     }
-  } 
-  
+  }
+
   /* 2. Compute the generators of the dual system. */
   dualpoly=dd_DDMatrix2Poly(Mdual, &err);
   Gdual=dd_CopyGenerators(dualpoly);
@@ -100,7 +100,7 @@ dd_MatrixPtr dd_BlockElimination(dd_MatrixPtr M, dd_colset delset, dd_ErrorType 
         k++;  /* new index of the variable x_j  */
         dd_set(prod, dd_purezero);
         for (h = 1; h <= m; h++){
-          dd_mul(temp,M->matrix[h-1][j-1],Gdual->matrix[i-1][h]); 
+          dd_mul(temp,M->matrix[h-1][j-1],Gdual->matrix[i-1][h]);
           dd_add(prod,prod,temp);
         }
         dd_set(Mproj->matrix[i-1][k-1],prod);
@@ -108,7 +108,7 @@ dd_MatrixPtr dd_BlockElimination(dd_MatrixPtr M, dd_colset delset, dd_ErrorType 
     }
   }
   if (localdebug) printf("Size of the projection system: %ld x %ld\n", mproj, dproj);
-  
+
   dd_FreePolyhedra(dualpoly);
   free(delindex);
   dd_clear(temp);
@@ -120,7 +120,7 @@ dd_MatrixPtr dd_BlockElimination(dd_MatrixPtr M, dd_colset delset, dd_ErrorType 
 
 
 dd_MatrixPtr dd_FourierElimination(dd_MatrixPtr M,dd_ErrorType *error)
-/* Eliminate the last variable (column) from the given H-matrix using 
+/* Eliminate the last variable (column) from the given H-matrix using
    the standard Fourier Elimination.
  */
 {
@@ -202,7 +202,7 @@ dd_MatrixPtr dd_FourierElimination(dd_MatrixPtr M,dd_ErrorType *error)
     for (j = 1; j <= dnew; j++) {
       dd_set(Mnew->matrix[iz-1][j-1], M->matrix[zerorowindex[iz]-1][j-1]);
     }
-  } 
+  }
 
   /* Create the new inequalities by combining x_d positive and negative ones. */
   inew=mzero;  /* the index of the last x_d zero inequality */
@@ -218,7 +218,7 @@ dd_MatrixPtr dd_FourierElimination(dd_MatrixPtr M,dd_ErrorType *error)
       }
       dd_Normalize(dnew,Mnew->matrix[inew-1]);
     }
-  } 
+  }
 
 
   free(posrowindex);

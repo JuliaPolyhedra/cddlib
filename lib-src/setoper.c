@@ -1,20 +1,20 @@
 /* setoper.c:
- * A set operation library 
+ * A set operation library
  * created by Komei Fukuda, Nov.14, 1993
- * modified on December 5, 1994 
-   (set_card function replaced with a better code by David Bremner) 
- * last modified on June 1, 2000 
+ * modified on December 5, 1994
+   (set_card function replaced with a better code by David Bremner)
+ * last modified on June 1, 2000
    (set_fwrite_compl(), set_groundsize added.  set_compl fixed.)
  */
- 
+
 #include "setoper.h"
 
 #include <limits.h>
 #define SETBITS (sizeof(long) * CHAR_BIT)
 /* (Number of chars in a long) * (number of bits in a char) */
 
-/* Definitions for optimized set_card function 
-   by David Bremner bremner@cs.mcgill.ca  
+/* Definitions for optimized set_card function
+   by David Bremner bremner@cs.mcgill.ca
 */
 
 /* Caution!!!
@@ -37,7 +37,7 @@ static unsigned char set_card_lut[]={
 unsigned long set_blocks(long len)
 {
 	long blocks=1L;
-	
+
 	if (len>0) blocks=((long)len-1)/SETBITS+2;
 	return blocks;
 }
@@ -46,8 +46,8 @@ void set_initialize(set_type *setp, long length)
 /* Make a set with a given bit lengths  */
 {
 	long i,forlim1,len;
-	
-    if (length<=0) len=1;else len=length; 
+
+    if (length<=0) len=1;else len=length;
      /* if negative length is requested, it generates the shortest length */
 
 	forlim1=set_blocks(len);
@@ -67,7 +67,7 @@ void set_emptyset(set_type set)
 /* Set set to be the emptyset  */
 {
 	long i,forlim;
-	
+
 	forlim=set_blocks(set[0])-1;
 	for (i=1; i<=forlim; i++)
 		set[i]=0U;
@@ -89,8 +89,8 @@ void set_addelem(set_type set, long elem)
 	long i,j;
 	unsigned long change;
 	unsigned long one=1U;
-	
-	if (elem<=set[0])    
+
+	if (elem<=set[0])
 	{
 		i=(elem-1)/SETBITS+1;
 		j=(elem-1)%SETBITS;
@@ -104,8 +104,8 @@ void set_delelem(set_type set, long elem)
 {
 	long  i,j;
 	unsigned long change;
-	unsigned long one=1U;	 
-	
+	unsigned long one=1U;
+
 	if (elem<=set[0])
 	{
 		i=(elem-1)/SETBITS+1;
@@ -119,7 +119,7 @@ void set_int(set_type set,set_type set1,set_type set2)
 /* Set intersection, assuming set1 and set2 have the same length as set */
 {
 	long  i,forlim;
-	
+
 	forlim=set_blocks(set[0])-1;
 	for (i=1;i<=forlim;i++)
 		set[i]=(set1[i] & set2[i]);
@@ -130,7 +130,7 @@ void set_uni(set_type set,set_type set1,set_type set2)
 {
 	long  i,forlim;
 
-	forlim=set_blocks(set[0])-1;	
+	forlim=set_blocks(set[0])-1;
 	for (i=1;i<=forlim;i++)
 		set[i]=set1[i] | set2[i];
 }
@@ -140,7 +140,7 @@ void set_diff(set_type set,set_type set1,set_type set2)
 {
 	long  i,forlim;
 
-	forlim=set_blocks(set[0])-1;	
+	forlim=set_blocks(set[0])-1;
 	for (i=1;i<=forlim;i++)
 		set[i]=set1[i] & (~set2[i]);
 }
@@ -150,9 +150,9 @@ void set_compl(set_type set,set_type set1)
 {
 	long  i,j,l,forlim;
 	unsigned long change;
-	unsigned long one=1U;	 
+	unsigned long one=1U;
 
-	forlim=set_blocks(set[0])-1;	
+	forlim=set_blocks(set[0])-1;
 	for (i=1;i<=forlim;i++)
 		set[i]= ~set1[i];
 
@@ -171,7 +171,7 @@ int set_subset(set_type set1,set_type set2)
 {
 	int  yes=1;
 	long i,forlim;
-	
+
 	forlim=set_blocks(set2[0])-1;
 	for (i=1;i<=forlim && yes;i++)
 		if ((set1[i] | set2[i])!=set2[i])
@@ -185,8 +185,8 @@ int set_member(long elem, set_type set)
 	int  yes=0;
 	long  i,j;
 	unsigned long testset;
-	unsigned long one=1U;	 
-	
+	unsigned long one=1U;
+
 	if (elem<=set[0])
 	{
 		i=(elem-1)/SETBITS+1;
@@ -205,7 +205,7 @@ long set_card(set_type set)
   unsigned long block;
   long car=0;
   set_card_lut_t *p;
-  
+
   p=(set_card_lut_t *)&set[1];
   for (block=0; block< LUTBLOCKS(set);block++) {
     car+=set_card_lut[p[block]];
@@ -217,7 +217,7 @@ long set_card(set_type set)
 long set_card(set_type set)
 {
 	long elem,car=0;
-	
+
 	for (elem=1; elem<=set[0]; elem++) {
 		if (set_member(elem,set)) car++;
     }
@@ -233,7 +233,7 @@ long set_groundsize(set_type set)
 void set_write(set_type set)
 {
 	long elem;
-	
+
 	for (elem=1;elem<=set[0];elem++)
 	{
 		if (set_member(elem,set))
@@ -245,7 +245,7 @@ void set_write(set_type set)
 void set_fwrite(FILE *f,set_type set)
 {
 	long elem;
-	
+
 	for (elem=1;elem<=set[0];elem++)
 	{
 		if (set_member(elem,set))
@@ -257,7 +257,7 @@ void set_fwrite(FILE *f,set_type set)
 void set_fwrite_compl(FILE *f,set_type set)
 {
 	long elem;
-	
+
 	for (elem=1;elem<=set[0];elem++)
 	{
 		if (!set_member(elem,set))
@@ -271,7 +271,7 @@ void set_binwrite(set_type set)
 	int i,j;
 	long forlim;
 	unsigned long e1,e2;
-	
+
 	printf("max element = %ld,\n",set[0]);
 	forlim=set_blocks(set[0])-1;
 	for (i=forlim;i>=1;i--)
@@ -295,7 +295,7 @@ void set_fbinwrite(FILE *f,set_type set)
 	int i,j;
 	long forlim;
 	long e1,e2;
-	
+
 	printf("max element = %ld,\n",set[0]);
 	forlim=set_blocks(set[0])-1;
 	for (i=forlim;i>=1;i--)

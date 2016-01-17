@@ -27,7 +27,7 @@ void dd_set_global_constants()
  dd_init(dd_one);
  dd_init(dd_minusone);
  dd_init(dd_purezero);
-  
+
  time(&dd_statStartTime); /* cddlib starting time */
  dd_statBApivots=0;  /* basis finding pivots */
  dd_statCCpivots=0;  /* criss-cross pivots */
@@ -38,7 +38,7 @@ void dd_set_global_constants()
  dd_choiceLPSolverDefault=dd_DualSimplex;  /* Default LP solver Algorithm */
  dd_choiceRedcheckAlgorithm=dd_DualSimplex;  /* Redundancy Checking Algorithm */
  dd_choiceLexicoPivotQ=dd_TRUE;    /* whether to use the lexicographic pivot */
- 
+
 #if defined GMPRATIONAL
  dd_statBSpivots=0;  /* basis status checking pivots */
  mpq_set_ui(dd_zero,0U,1U);
@@ -67,7 +67,7 @@ void dd_free_global_constants()
  dd_clear(dd_one);
  dd_clear(dd_minusone);
  dd_clear(dd_purezero);
-  
+
  time(&dd_statStartTime); /* cddlib starting time */
  dd_statBApivots=0;  /* basis finding pivots */
  dd_statCCpivots=0;  /* criss-cross pivots */
@@ -78,7 +78,7 @@ void dd_free_global_constants()
  dd_choiceLPSolverDefault=dd_DualSimplex;  /* Default LP solver Algorithm */
  dd_choiceRedcheckAlgorithm=dd_DualSimplex;  /* Redundancy Checking Algorithm */
  dd_choiceLexicoPivotQ=dd_TRUE;    /* whether to use the lexicographic pivot */
- 
+
 #if defined GMPRATIONAL
  dd_statBSpivots=0;  /* basis status checking pivots */
  ddf_free_global_constants();
@@ -102,11 +102,11 @@ void ddd_mpq_set_si(mytype a,signed long b)
 #endif
 
 #if defined dd_CDOUBLE
-void ddd_init(mytype a)   
+void ddd_init(mytype a)
 {
   a[0]=0L;
 }
-  
+
 void ddd_clear(mytype a)
 {
   /* a[0]=0L;  */
