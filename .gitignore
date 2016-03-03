@@ -2,3 +2,4 @@ Makefile
 *.o
 autom4te.cache
 *.swp
+.DS_Store*
