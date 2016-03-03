@@ -213,8 +213,8 @@ void dd_AddRay(dd_ConePtr cone, mytype *p)
   dd_colrange j;
 
   if (cone->FirstRay == NULL) {
-    cone->FirstRay = (dd_RayPtr) malloc(sizeof(dd_RayType));
-    cone->FirstRay->Ray = (mytype *) calloc(cone->d, sizeof(mytype));
+    cone->FirstRay = (dd_RayPtr) dd_malloc(sizeof(dd_RayType));
+    cone->FirstRay->Ray = (mytype *) dd_calloc(cone->d, sizeof(mytype));
     for (j=0; j<cone->d; j++) dd_init(cone->FirstRay->Ray[j]);
     dd_init(cone->FirstRay->ARay);
     if (dd_debug)
@@ -222,8 +222,8 @@ void dd_AddRay(dd_ConePtr cone, mytype *p)
     cone->LastRay = cone->FirstRay;
     cone->ArtificialRay->Next = cone->FirstRay;
   } else {
-    cone->LastRay->Next = (dd_RayPtr) malloc(sizeof(dd_RayType));
-    cone->LastRay->Next->Ray = (mytype *) calloc(cone->d, sizeof(mytype));
+    cone->LastRay->Next = (dd_RayPtr) dd_malloc(sizeof(dd_RayType));
+    cone->LastRay->Next->Ray = (mytype *) dd_calloc(cone->d, sizeof(mytype));
     for (j=0; j<cone->d; j++) dd_init(cone->LastRay->Next->Ray[j]);
     dd_init(cone->LastRay->Next->ARay);
     if (dd_debug) fprintf(stderr,"Create a new ray pointer\n");
@@ -265,8 +265,8 @@ void dd_AddArtificialRay(dd_ConePtr cone)
     free(zerovector); /* 086 */
     return;
   }
-  cone->ArtificialRay = (dd_RayPtr) malloc(sizeof(dd_RayType));
-  cone->ArtificialRay->Ray = (mytype *) calloc(d1, sizeof(mytype));
+  cone->ArtificialRay = (dd_RayPtr) dd_malloc(sizeof(dd_RayType));
+  cone->ArtificialRay->Ray = (mytype *) dd_calloc(d1, sizeof(mytype));
   for (j=0; j<d1; j++) dd_init(cone->ArtificialRay->Ray[j]);
   dd_init(cone->ArtificialRay->ARay);
 
@@ -387,7 +387,7 @@ void dd_ConditionalAddEdge(dd_ConePtr cone,
       if (adjacent){
         if (localdebug) fprintf(stderr,"The pair is adjacent and the pair must be stored for iteration %ld (row%ld)\n",
           fmin, cone->OrderVector[fmin]);
-        NewEdge=(dd_AdjacencyPtr) malloc(sizeof *NewEdge);
+        NewEdge=(dd_AdjacencyPtr) dd_malloc(sizeof *NewEdge);
         NewEdge->Ray1=Rmax;  /* save the one remains in iteration fmin in the first */
         NewEdge->Ray2=Rmin;  /* save the one deleted in iteration fmin in the second */
         NewEdge->Next=NULL;
@@ -722,7 +722,7 @@ void dd_InitializeArow(dd_colrange d,dd_Arow *a)
 {
   dd_colrange j;
 
-  if (d>0) *a=(mytype*) calloc(d,sizeof(mytype));
+  if (d>0) *a=(mytype*) dd_calloc(d,sizeof(mytype));
   for (j = 0; j < d; j++) {
       dd_init((*a)[j]);
   }
@@ -732,7 +732,7 @@ void dd_InitializeAmatrix(dd_rowrange m,dd_colrange d,dd_Amatrix *A)
 {
   dd_rowrange i;
 
-  if (m>0) (*A)=(mytype**) calloc(m,sizeof(mytype*));
+  if (m>0) (*A)=(mytype**) dd_calloc(m,sizeof(mytype*));
   for (i = 0; i < m; i++) {
     dd_InitializeArow(d,&((*A)[i]));
   }
@@ -771,9 +771,9 @@ void dd_InitializeBmatrix(dd_colrange d,dd_Bmatrix *B)
 {
   dd_colrange i,j;
 
-  (*B)=(mytype**) calloc(d,sizeof(mytype*));
+  (*B)=(mytype**) dd_calloc(d,sizeof(mytype*));
   for (j = 0; j < d; j++) {
-    (*B)[j]=(mytype*) calloc(d,sizeof(mytype));
+    (*B)[j]=(mytype*) dd_calloc(d,sizeof(mytype));
   }
   for (i = 0; i < d; i++) {
     for (j = 0; j < d; j++) {
@@ -817,8 +817,8 @@ dd_SetFamilyPtr dd_CreateSetFamily(dd_bigrange fsize, dd_bigrange ssize)
     s0=ssize; s1=ssize;
   }
 
-  F=(dd_SetFamilyPtr) malloc (sizeof(dd_SetFamilyType));
-  F->set=(set_type*) calloc(f1,sizeof(set_type));
+  F=(dd_SetFamilyPtr) dd_malloc (sizeof(dd_SetFamilyType));
+  F->set=(set_type*) dd_calloc(f1,sizeof(set_type));
   for (i=0; i<f1; i++) {
     set_initialize(&(F->set[i]), s1);
   }
@@ -861,7 +861,7 @@ dd_MatrixPtr dd_CreateMatrix(dd_rowrange m_size,dd_colrange d_size)
   } else {
     d0=d_size; d1=d_size;
   }
-  M=(dd_MatrixPtr) malloc (sizeof(dd_MatrixType));
+  M=(dd_MatrixPtr) dd_malloc (sizeof(dd_MatrixType));
   dd_InitializeAmatrix(m1,d1,&(M->matrix));
   dd_InitializeArow(d1,&(M->rowvec));
   M->rowsize=m0;
@@ -958,7 +958,7 @@ long dd_MatrixRank(dd_MatrixPtr M, dd_rowset ignoredrows, dd_colset ignoredcols,
   set_copy(ColSelected,ignoredcols);
   dd_InitializeBmatrix(M->colsize, &B);
   dd_SetToIdentity(M->colsize, B);
-  roworder=(long *)calloc(M->rowsize+1,sizeof(long));
+  roworder=(long *)dd_calloc(M->rowsize+1,sizeof(long));
   for (r=0; r<M->rowsize; r++){roworder[r+1]=r+1;
   }
 
@@ -1108,7 +1108,7 @@ void dd_CreateNewRay(dd_ConePtr cone,
       for (j=0; j<last_d; j++) dd_clear(NewRay[j]);
       free(NewRay);
     }
-    NewRay=(mytype*)calloc(cone->d,sizeof(mytype));
+    NewRay=(mytype*)dd_calloc(cone->d,sizeof(mytype));
     for (j=0; j<cone->d; j++) dd_init(NewRay[j]);
     last_d=cone->d;
   }

@@ -17,8 +17,25 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
+#include <stdlib.h>
+
 #include "setoper.h"  /* set operation library header (Ver. March 16,1995 or later) */
 #include "cdd.h"
+
+void *dd_malloc(size_t size) {
+  void *x = malloc(size);
+  if (x == 0) {
+    fprintf(stderr, "ERROR: Out of Memory\n");
+    exit(EXIT_FAILURE);
+  }
+}
+void *dd_calloc(size_t nmemb, size_t size) {
+  void *x = calloc(nmemb, size);
+  if (x == 0) {
+    fprintf(stderr, "ERROR: Out of Memory\n");
+    exit(EXIT_FAILURE);
+  }
+}
 
 void dd_set_global_constants()
 {

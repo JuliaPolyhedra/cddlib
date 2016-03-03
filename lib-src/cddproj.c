@@ -45,7 +45,7 @@ dd_MatrixPtr dd_BlockElimination(dd_MatrixPtr M, dd_colset delset, dd_ErrorType 
   *error=dd_NoError;
   m= M->rowsize;
   d= M->colsize;
-  delindex=(long*)calloc(d+1,sizeof(long));
+  delindex=(long*)dd_calloc(d+1,sizeof(long));
   dd_init(temp);
   dd_init(prod);
 
@@ -159,9 +159,9 @@ dd_MatrixPtr dd_FourierElimination(dd_MatrixPtr M,dd_ErrorType *error)
   }
 
   /* Create temporary spaces to be removed at the end of this function */
-  posrowindex=(long*)calloc(m+1,sizeof(long));
-  negrowindex=(long*)calloc(m+1,sizeof(long));
-  zerorowindex=(long*)calloc(m+1,sizeof(long));
+  posrowindex=(long*)dd_calloc(m+1,sizeof(long));
+  negrowindex=(long*)dd_calloc(m+1,sizeof(long));
+  zerorowindex=(long*)dd_calloc(m+1,sizeof(long));
   dd_init(temp1);
   dd_init(temp2);
 

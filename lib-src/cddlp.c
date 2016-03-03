@@ -78,7 +78,7 @@ dd_LPSolutionPtr dd_CopyLPSolution(dd_LPPtr lp)
   dd_colrange j;
   long i;
 
-  lps=(dd_LPSolutionPtr) calloc(1,sizeof(dd_LPSolutionType));
+  lps=(dd_LPSolutionPtr) dd_calloc(1,sizeof(dd_LPSolutionType));
   for (i=1; i<=dd_filenamelen; i++) lps->filename[i-1]=lp->filename[i-1];
   lps->objective=lp->objective;
   lps->solver=lp->solver;
@@ -91,7 +91,7 @@ dd_LPSolutionPtr dd_CopyLPSolution(dd_LPPtr lp)
   dd_set(lps->optvalue,lp->optvalue);  /* optimal value */
   dd_InitializeArow(lp->d+1,&(lps->sol));
   dd_InitializeArow(lp->d+1,&(lps->dsol));
-  lps->nbindex=(long*) calloc((lp->d)+1,sizeof(long));  /* dual solution */
+  lps->nbindex=(long*) dd_calloc((lp->d)+1,sizeof(long));  /* dual solution */
   for (j=0; j<=lp->d; j++){
     dd_set(lps->sol[j],lp->sol[j]);
     dd_set(lps->dsol[j],lp->dsol[j]);
@@ -113,7 +113,7 @@ dd_LPPtr dd_CreateLPData(dd_LPObjectiveType obj,
 {
   dd_LPType *lp;
 
-  lp=(dd_LPPtr) calloc(1,sizeof(dd_LPType));
+  lp=(dd_LPPtr) dd_calloc(1,sizeof(dd_LPType));
   lp->solver=dd_choiceLPSolverDefault;  /* set the default lp solver */
   lp->d=d;
   lp->m=m;
@@ -124,8 +124,8 @@ dd_LPPtr dd_CreateLPData(dd_LPObjectiveType obj,
   lp->LPS=dd_LPSundecided;
   lp->eqnumber=0;  /* the number of equalities */
 
-  lp->nbindex=(long*) calloc(d+1,sizeof(long));
-  lp->given_nbindex=(long*) calloc(d+1,sizeof(long));
+  lp->nbindex=(long*) dd_calloc(d+1,sizeof(long));
+  lp->given_nbindex=(long*) dd_calloc(d+1,sizeof(long));
   set_initialize(&(lp->equalityset),m);
     /* i must be in the set iff i-th row is equality . */
 
@@ -553,7 +553,7 @@ void dd_SelectDualSimplexPivot(dd_rowrange m_size,dd_colrange d_size,
       set_free(tieset);
       set_free(stieset);
     }
-    rcost=(mytype*) calloc(d_size,sizeof(mytype));
+    rcost=(mytype*) dd_calloc(d_size,sizeof(mytype));
     for (j=1; j<=d_size; j++){ dd_init(rcost[j-1]);}
     set_initialize(&tieset,d_size);
     set_initialize(&stieset,d_size);
@@ -761,7 +761,7 @@ void dd_GaussianColumnPivot(dd_rowrange m_size, dd_colrange d_size,
       for (j=1; j<=last_d; j++) dd_clear(Rtemp[j-1]);
       free(Rtemp);
     }
-    Rtemp=(mytype*)calloc(d_size,sizeof(mytype));
+    Rtemp=(mytype*)dd_calloc(d_size,sizeof(mytype));
     for (j=1; j<=d_size; j++) dd_init(Rtemp[j-1]);
     last_d=d_size;
   }
@@ -1199,8 +1199,8 @@ void dd_FindDualFeasibleBasis(dd_rowrange m_size,dd_colrange d_size,
       free(rcost);
       free(nbindex_ref);
     }
-    rcost=(mytype*) calloc(d_size,sizeof(mytype));
-    nbindex_ref=(long*) calloc(d_size+1,sizeof(long));
+    rcost=(mytype*) dd_calloc(d_size,sizeof(mytype));
+    nbindex_ref=(long*) dd_calloc(d_size+1,sizeof(long));
     for (j=1; j<=d_size; j++){ dd_init(rcost[j-1]);}
     d_last=d_size;
   }
@@ -1435,9 +1435,9 @@ When LP is dual-inconsistent then lp->se returns the evidence column.
        free(bflag);
        free(nbindex_ref);
      }
-     OrderVector=(long *)calloc(lp->m+1,sizeof(*OrderVector));
-     bflag=(long *) calloc(lp->m+2,sizeof(*bflag));  /* one more element for an auxiliary variable  */
-     nbindex_ref=(long*) calloc(lp->d+1,sizeof(long));
+     OrderVector=(long *)dd_calloc(lp->m+1,sizeof(*OrderVector));
+     bflag=(long *) dd_calloc(lp->m+2,sizeof(*bflag));  /* one more element for an auxiliary variable  */
+     nbindex_ref=(long*) dd_calloc(lp->d+1,sizeof(long));
      mlast=lp->m;nlast=lp->d;
   }
   /* Initializing control variables. */
@@ -1605,15 +1605,15 @@ When LP is dual-inconsistent then lp->se returns the evidence column.
 #if !defined GMPRATIONAL
   maxpivots=maxpivfactor*lp->d;  /* maximum pivots to be performed when floating-point arithmetics is used. */
 #endif
-  nbtemp=(long *) calloc(lp->d+1,sizeof(long));
+  nbtemp=(long *) dd_calloc(lp->d+1,sizeof(long));
   for (i=0; i<= 4; i++) lp->pivots[i]=0;
   if (bflag==NULL || mlast!=lp->m){
      if (mlast!=lp->m && mlast>0) {
        free(bflag);   /* called previously with different lp->m */
        free(OrderVector);
      }
-     bflag=(long *) calloc(lp->m+1,sizeof(long));
-     OrderVector=(long *)calloc(lp->m+1,sizeof(long));
+     bflag=(long *) dd_calloc(lp->m+1,sizeof(long));
+     OrderVector=(long *)dd_calloc(lp->m+1,sizeof(long));
      /* initialize only for the first time or when a larger space is needed */
 
      mlast=lp->m;
@@ -2884,7 +2884,7 @@ dd_rowset dd_RedundantRowsViaShooting(dd_MatrixPtr M, dd_ErrorType *error)  /* 0
   dd_InitializeArow(d, &shootdir);
   dd_InitializeArow(d, &cvec);
 
-  rowflag=(long *)calloc(m+1, sizeof(long));
+  rowflag=(long *)dd_calloc(m+1, sizeof(long));
 
   /* First find some (likely) nonredundant inequalities by Interior Point Find. */
   lp0=dd_Matrix2LP(M, &err);
@@ -3349,7 +3349,7 @@ dd_rowindex *newpos, dd_ErrorType *error) /* 094 */
 
   m=(*M)->rowsize;
   set_initialize(redset, m);
-  revpos=(long *)calloc(m+1,sizeof(long));
+  revpos=(long *)dd_calloc(m+1,sizeof(long));
 
   success=dd_MatrixCanonicalizeLinearity(M, impl_linset, newpos, error);
 
@@ -3609,15 +3609,15 @@ arithmetics.
      printf("\nEvaluating dd_BasisStatusMaximize:\n");
   }
   dd_init(val);
-  nbtemp=(long *) calloc(d_size+1,sizeof(long));
+  nbtemp=(long *) dd_calloc(d_size+1,sizeof(long));
   for (i=0; i<= 4; i++) pivots[i]=0;
   if (bflag==NULL || mlast!=m_size){
      if (mlast!=m_size && mlast>0) {
        free(bflag);   /* called previously with different m_size */
        free(OrderVector);
      }
-     bflag=(long *) calloc(m_size+1,sizeof(long));
-     OrderVector=(long *)calloc(m_size+1,sizeof(long));
+     bflag=(long *) dd_calloc(m_size+1,sizeof(long));
+     OrderVector=(long *)dd_calloc(m_size+1,sizeof(long));
      /* initialize only for the first time or when a larger space is needed */
       mlast=m_size;
   }

@@ -157,8 +157,8 @@ void dd_InitialDataSetup(dd_ConePtr cone)
     }
     free(Vector1); free(Vector2);
     }
-    Vector1=(mytype*)calloc(cone->d,sizeof(mytype));
-    Vector2=(mytype*)calloc(cone->d,sizeof(mytype));
+    Vector1=(mytype*)dd_calloc(cone->d,sizeof(mytype));
+    Vector2=(mytype*)dd_calloc(cone->d,sizeof(mytype));
     for (j=0; j<cone->d; j++){
       dd_init(Vector1[j]);
       dd_init(Vector2[j]);

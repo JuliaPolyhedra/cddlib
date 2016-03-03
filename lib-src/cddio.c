@@ -43,7 +43,7 @@ void dd_SetInputFile(FILE **f,dd_DataFileType inputfile,dd_ErrorType *Error)
           break;
         case ';':  case ' ':  case '\0':  case '\n':  case '\t':
           stop=dd_TRUE;
-          tempname=(char*)calloc(dd_filenamelen,sizeof(ch));
+          tempname=(char*)dd_calloc(dd_filenamelen,sizeof(ch));
           strncpy(tempname,inputfile,i);
           strcpy(inputfile,tempname);
           free(tempname);
@@ -312,8 +312,8 @@ dd_MatrixPtr dd_MatrixNormalizedSortedCopy(dd_MatrixPtr M,dd_rowindex *newpos)  
   /* if (newpos!=NULL) free(newpos); */
   m= M->rowsize;
   d= M->colsize;
-  roworder=(long *)calloc(m+1,sizeof(long));
-  *newpos=(long *)calloc(m+1,sizeof(long));
+  roworder=(long *)dd_calloc(m+1,sizeof(long));
+  *newpos=(long *)dd_calloc(m+1,sizeof(long));
   if (m >=0 && d >=0){
     Mnorm=dd_MatrixNormalizedCopy(M);
     Mcopy=dd_CreateMatrix(m, d);
@@ -356,7 +356,7 @@ dd_MatrixPtr dd_MatrixUniqueCopy(dd_MatrixPtr M,dd_rowindex *newpos)
   m= M->rowsize;
   d= M->colsize;
   preferredrows=M->linset;
-  roworder=(long *)calloc(m+1,sizeof(long));
+  roworder=(long *)dd_calloc(m+1,sizeof(long));
   if (m >=0 && d >=0){
     for(i=1; i<=m; i++) roworder[i]=i;
     dd_UniqueRows(roworder, 1, m, M->matrix, d,preferredrows, &uniqrows);
@@ -393,8 +393,8 @@ dd_MatrixPtr dd_MatrixNormalizedSortedUniqueCopy(dd_MatrixPtr M,dd_rowindex *new
   /* if (newpos!=NULL) free(newpos); */
   m= M->rowsize;
   d= M->colsize;
-  *newpos=(long *)calloc(m+1,sizeof(long));
-  newpos1r=(long *)calloc(m+1,sizeof(long));
+  *newpos=(long *)dd_calloc(m+1,sizeof(long));
+  newpos1r=(long *)dd_calloc(m+1,sizeof(long));
   if (m>=0 && d>=0){
     M1=dd_MatrixNormalizedSortedCopy(M,&newpos1);
     for (i=1; i<=m;i++) newpos1r[newpos1[i]]=i;  /* reverse of newpos1 */
@@ -428,8 +428,8 @@ dd_MatrixPtr dd_MatrixSortedUniqueCopy(dd_MatrixPtr M,dd_rowindex *newpos)  /* 0
   /* if (newpos!=NULL) free(newpos); */
   m= M->rowsize;
   d= M->colsize;
-  *newpos=(long *)calloc(m+1,sizeof(long));
-  newpos1r=(long *)calloc(m+1,sizeof(long));
+  *newpos=(long *)dd_calloc(m+1,sizeof(long));
+  newpos1r=(long *)dd_calloc(m+1,sizeof(long));
   if (m>=0 && d>=0){
     M1=dd_MatrixNormalizedSortedCopy(M,&newpos1);
     for (i=1; i<=m;i++) newpos1r[newpos1[i]]=i;  /* reverse of newpos1 */
@@ -504,6 +504,16 @@ int dd_MatrixAppendTo(dd_MatrixPtr *M1, dd_MatrixPtr M2)
     success=1;
   }
   return success;
+  /*
+  dd_boolean success=0;
+  dd_MatrixPtr M = dd_MatrixAppend(*M1, M2);
+  if (M != NULL) {
+    dd_FreeMatrix(*M1);
+    *M1=M;
+    success=1;
+  }
+  return success;
+  */
 }
 
 int dd_MatrixRowRemove(dd_MatrixPtr *M, dd_rowrange r) /* 092 */
@@ -543,7 +553,7 @@ int dd_MatrixRowRemove2(dd_MatrixPtr *M, dd_rowrange r, dd_rowindex *newpos) /* 
   d=(*M)->colsize;
 
   if (r >= 1 && r <=m){
-    roworder=(long *)calloc(m+1,sizeof(long));
+    roworder=(long *)dd_calloc(m+1,sizeof(long));
     (*M)->rowsize=m-1;
     dd_FreeArow(d, (*M)->matrix[r-1]);
     set_delelem((*M)->linset,r);
@@ -609,7 +619,7 @@ dd_MatrixPtr dd_MatrixSubmatrix2(dd_MatrixPtr M, dd_rowset delset,dd_rowindex *n
   d= M->colsize;
   msub=m;
   if (m >=0 && d >=0){
-    roworder=(long *)calloc(m+1,sizeof(long));
+    roworder=(long *)dd_calloc(m+1,sizeof(long));
     for (i=1; i<=m; i++) {
        if (set_member(i,delset)) msub-=1;
     }
@@ -649,7 +659,7 @@ dd_MatrixPtr dd_MatrixSubmatrix2L(dd_MatrixPtr M, dd_rowset delset,dd_rowindex *
   d= M->colsize;
   msub=m;
   if (m >=0 && d >=0){
-    roworder=(long *)calloc(m+1,sizeof(long));
+    roworder=(long *)dd_calloc(m+1,sizeof(long));
     for (i=1; i<=m; i++) {
        if (set_member(i,delset)) msub-=1;
     }
@@ -726,7 +736,7 @@ dd_PolyhedraPtr dd_CreatePolyhedraData(dd_rowrange m, dd_colrange d)
   dd_rowrange i;
   dd_PolyhedraPtr poly=NULL;
 
-  poly=(dd_PolyhedraPtr) malloc (sizeof(dd_PolyhedraType));
+  poly=(dd_PolyhedraPtr) dd_malloc (sizeof(dd_PolyhedraType));
   poly->child       =NULL; /* this links the homogenized cone data */
   poly->m           =m;
   poly->d           =d;
@@ -740,7 +750,7 @@ dd_PolyhedraPtr dd_CreatePolyhedraData(dd_rowrange m, dd_colrange d)
   poly->representation       =dd_Inequality;
   poly->homogeneous =dd_FALSE;
 
-  poly->EqualityIndex=(int *)calloc(m+2, sizeof(int));
+  poly->EqualityIndex=(int *)dd_calloc(m+2, sizeof(int));
     /* size increased to m+2 in 092b because it is used by the child cone,
        This is a bug fix suggested by Thao Dang. */
     /* ith component is 1 if it is equality, -1 if it is strict inequality, 0 otherwise. */
@@ -763,7 +773,7 @@ dd_boolean dd_InitializeConeData(dd_rowrange m, dd_colrange d, dd_ConePtr *cone)
   dd_boolean success=dd_TRUE;
   dd_colrange j;
 
-  (*cone)=(dd_ConePtr)calloc(1, sizeof(dd_ConeType));
+  (*cone)=(dd_ConePtr)dd_calloc(1, sizeof(dd_ConeType));
 
 /* INPUT: A given representation of a cone: inequality */
   (*cone)->m=m;
@@ -812,12 +822,12 @@ dd_boolean dd_InitializeConeData(dd_rowrange m, dd_colrange d, dd_ConePtr *cone)
   dd_InitializeAmatrix((*cone)->m_alloc,(*cone)->d_alloc,&((*cone)->A));
 
   (*cone)->Edges
-     =(dd_AdjacencyType**) calloc((*cone)->m_alloc,sizeof(dd_AdjacencyType*));
+     =(dd_AdjacencyType**) dd_calloc((*cone)->m_alloc,sizeof(dd_AdjacencyType*));
   for (j=0; j<(*cone)->m_alloc; j++) (*cone)->Edges[j]=NULL; /* 094h */
-  (*cone)->InitialRayIndex=(long*)calloc(d+1,sizeof(long));
-  (*cone)->OrderVector=(long*)calloc((*cone)->m_alloc+1,sizeof(long));
+  (*cone)->InitialRayIndex=(long*)dd_calloc(d+1,sizeof(long));
+  (*cone)->OrderVector=(long*)dd_calloc((*cone)->m_alloc+1,sizeof(long));
 
-  (*cone)->newcol=(long*)calloc(((*cone)->d)+1,sizeof(long));
+  (*cone)->newcol=(long*)dd_calloc(((*cone)->d)+1,sizeof(long));
   for (j=0; j<=(*cone)->d; j++) (*cone)->newcol[j]=j;  /* identity map, initially */
   (*cone)->LinearityDim = -2; /* -2 if it is not computed */
   (*cone)->ColReduced   = dd_FALSE;
@@ -1344,7 +1354,7 @@ void dd_ComputeAinc(dd_PolyhedraPtr poly)
       !(poly->homogeneous) && poly->representation==Inequality,
       it is poly->m+1.   See dd_ConeDataLoad.
    */
-  poly->Ainc=(set_type*)calloc(m1, sizeof(set_type));
+  poly->Ainc=(set_type*)dd_calloc(m1, sizeof(set_type));
   for(i=1; i<=m1; i++) set_initialize(&(poly->Ainc[i-1]),poly->n);
   set_initialize(&(poly->Ared), m1);
   set_initialize(&(poly->Adom), m1);
