@@ -123,8 +123,8 @@ am__uninstall_files_from_dir = { \
 am__installdirs = "$(DESTDIR)$(libdir)" "$(DESTDIR)$(includedir)"
 LTLIBRARIES = $(lib_LTLIBRARIES)
 libcdd_la_LIBADD =
-am_libcdd_la_OBJECTS = cddcore.lo cddlp.lo cddmp.lo cddio.lo cddlib.lo \
-	cddproj.lo setoper.lo
+am_libcdd_la_OBJECTS = cddstd.lo cddcore.lo cddlp.lo cddmp.lo cddio.lo \
+	cddlib.lo cddproj.lo setoper.lo
 libcdd_la_OBJECTS = $(am_libcdd_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
@@ -313,6 +313,7 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 lib_LTLIBRARIES = libcdd.la
 libcdd_la_SOURCES = \
+cddstd.c \
 cddcore.c \
 cddlp.c	\
 cddmp.c \
@@ -322,6 +323,7 @@ cddproj.c \
 setoper.c
 
 include_HEADERS = \
+cddstd.h \
 cdd.h \
 cddmp.h \
 cddtypes.h \
@@ -418,6 +420,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/cddlp.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/cddmp.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/cddproj.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/cddstd.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/setoper.Plo@am__quote@
 
 .c.o:

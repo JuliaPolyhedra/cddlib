@@ -13,6 +13,7 @@
 
 #include "setoper.h"  /* set operation library header (Ver. June 1, 2000 or later) */
 #include "cdd_f.h"
+#include "cddstd_f.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -214,8 +215,8 @@ void ddf_AddRay(ddf_ConePtr cone, myfloat *p)
   ddf_colrange j;
 
   if (cone->FirstRay == NULL) {
-    cone->FirstRay = (ddf_RayPtr) malloc(sizeof(ddf_RayType));
-    cone->FirstRay->Ray = (myfloat *) calloc(cone->d, sizeof(myfloat));
+    cone->FirstRay = (ddf_RayPtr) ddf_malloc(sizeof(ddf_RayType));
+    cone->FirstRay->Ray = (myfloat *) ddf_calloc(cone->d, sizeof(myfloat));
     for (j=0; j<cone->d; j++) ddf_init(cone->FirstRay->Ray[j]);
     ddf_init(cone->FirstRay->ARay);
     if (ddf_debug)
@@ -223,8 +224,8 @@ void ddf_AddRay(ddf_ConePtr cone, myfloat *p)
     cone->LastRay = cone->FirstRay;
     cone->ArtificialRay->Next = cone->FirstRay;
   } else {
-    cone->LastRay->Next = (ddf_RayPtr) malloc(sizeof(ddf_RayType));
-    cone->LastRay->Next->Ray = (myfloat *) calloc(cone->d, sizeof(myfloat));
+    cone->LastRay->Next = (ddf_RayPtr) ddf_malloc(sizeof(ddf_RayType));
+    cone->LastRay->Next->Ray = (myfloat *) ddf_calloc(cone->d, sizeof(myfloat));
     for (j=0; j<cone->d; j++) ddf_init(cone->LastRay->Next->Ray[j]);
     ddf_init(cone->LastRay->Next->ARay);
     if (ddf_debug) fprintf(stderr,"Create a new ray pointer\n");
@@ -266,8 +267,8 @@ void ddf_AddArtificialRay(ddf_ConePtr cone)
     free(zerovector); /* 086 */
     return;
   }
-  cone->ArtificialRay = (ddf_RayPtr) malloc(sizeof(ddf_RayType));
-  cone->ArtificialRay->Ray = (myfloat *) calloc(d1, sizeof(myfloat));
+  cone->ArtificialRay = (ddf_RayPtr) ddf_malloc(sizeof(ddf_RayType));
+  cone->ArtificialRay->Ray = (myfloat *) ddf_calloc(d1, sizeof(myfloat));
   for (j=0; j<d1; j++) ddf_init(cone->ArtificialRay->Ray[j]);
   ddf_init(cone->ArtificialRay->ARay);
 
@@ -388,7 +389,7 @@ void ddf_ConditionalAddEdge(ddf_ConePtr cone,
       if (adjacent){
         if (localdebug) fprintf(stderr,"The pair is adjacent and the pair must be stored for iteration %ld (row%ld)\n",
           fmin, cone->OrderVector[fmin]);
-        NewEdge=(ddf_AdjacencyPtr) malloc(sizeof *NewEdge);
+        NewEdge=(ddf_AdjacencyPtr) ddf_malloc(sizeof *NewEdge);
         NewEdge->Ray1=Rmax;  /* save the one remains in iteration fmin in the first */
         NewEdge->Ray2=Rmin;  /* save the one deleted in iteration fmin in the second */
         NewEdge->Next=NULL;
@@ -723,7 +724,7 @@ void ddf_InitializeArow(ddf_colrange d,ddf_Arow *a)
 {
   ddf_colrange j;
 
-  if (d>0) *a=(myfloat*) calloc(d,sizeof(myfloat));
+  if (d>0) *a=(myfloat*) ddf_calloc(d,sizeof(myfloat));
   for (j = 0; j < d; j++) {
       ddf_init((*a)[j]);
   }
@@ -733,7 +734,7 @@ void ddf_InitializeAmatrix(ddf_rowrange m,ddf_colrange d,ddf_Amatrix *A)
 {
   ddf_rowrange i;
 
-  if (m>0) (*A)=(myfloat**) calloc(m,sizeof(myfloat*));
+  if (m>0) (*A)=(myfloat**) ddf_calloc(m,sizeof(myfloat*));
   for (i = 0; i < m; i++) {
     ddf_InitializeArow(d,&((*A)[i]));
   }
@@ -772,9 +773,9 @@ void ddf_InitializeBmatrix(ddf_colrange d,ddf_Bmatrix *B)
 {
   ddf_colrange i,j;
 
-  (*B)=(myfloat**) calloc(d,sizeof(myfloat*));
+  (*B)=(myfloat**) ddf_calloc(d,sizeof(myfloat*));
   for (j = 0; j < d; j++) {
-    (*B)[j]=(myfloat*) calloc(d,sizeof(myfloat));
+    (*B)[j]=(myfloat*) ddf_calloc(d,sizeof(myfloat));
   }
   for (i = 0; i < d; i++) {
     for (j = 0; j < d; j++) {
@@ -818,8 +819,8 @@ ddf_SetFamilyPtr ddf_CreateSetFamily(ddf_bigrange fsize, ddf_bigrange ssize)
     s0=ssize; s1=ssize;
   }
 
-  F=(ddf_SetFamilyPtr) malloc (sizeof(ddf_SetFamilyType));
-  F->set=(set_type*) calloc(f1,sizeof(set_type));
+  F=(ddf_SetFamilyPtr) ddf_malloc (sizeof(ddf_SetFamilyType));
+  F->set=(set_type*) ddf_calloc(f1,sizeof(set_type));
   for (i=0; i<f1; i++) {
     set_initialize(&(F->set[i]), s1);
   }
@@ -862,7 +863,7 @@ ddf_MatrixPtr ddf_CreateMatrix(ddf_rowrange m_size,ddf_colrange d_size)
   } else {
     d0=d_size; d1=d_size;
   }
-  M=(ddf_MatrixPtr) malloc (sizeof(ddf_MatrixType));
+  M=(ddf_MatrixPtr) ddf_malloc (sizeof(ddf_MatrixType));
   ddf_InitializeAmatrix(m1,d1,&(M->matrix));
   ddf_InitializeArow(d1,&(M->rowvec));
   M->rowsize=m0;
@@ -959,7 +960,7 @@ long ddf_MatrixRank(ddf_MatrixPtr M, ddf_rowset ignoredrows, ddf_colset ignoredc
   set_copy(ColSelected,ignoredcols);
   ddf_InitializeBmatrix(M->colsize, &B);
   ddf_SetToIdentity(M->colsize, B);
-  roworder=(long *)calloc(M->rowsize+1,sizeof(long));
+  roworder=(long *)ddf_calloc(M->rowsize+1,sizeof(long));
   for (r=0; r<M->rowsize; r++){roworder[r+1]=r+1;
   }
 
@@ -1109,7 +1110,7 @@ void ddf_CreateNewRay(ddf_ConePtr cone,
       for (j=0; j<last_d; j++) ddf_clear(NewRay[j]);
       free(NewRay);
     }
-    NewRay=(myfloat*)calloc(cone->d,sizeof(myfloat));
+    NewRay=(myfloat*)ddf_calloc(cone->d,sizeof(myfloat));
     for (j=0; j<cone->d; j++) ddf_init(NewRay[j]);
     last_d=cone->d;
   }

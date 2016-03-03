@@ -162,7 +162,14 @@ int main(int argc, char *argv[])
   ch=getchar();
   if (ch=='y' || ch=='Y') rip=dd_TRUE;
   printf("Minimum dimension of faces to list (0..%ld) ? ",M->colsize-1);
-  scanf("%ld", &mindim);
+  int rc = 0;
+  while (rc != 1) {
+    rc = scanf("%ld",&mindim);
+    if (rc == EOF) {
+      perror("scanf");
+      exit(EXIT_FAILURE);
+    }
+  }
   if (mindim>=M->colsize) mindim=M->colsize-1;
   printf("Minimum dimension is set to %ld.", mindim);
 

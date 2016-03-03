@@ -117,8 +117,6 @@ int ddd_sgn(mytype);
 double ddd_get_d(mytype);
 void ddd_mpq_set_si(mytype,signed long);
 
-void *dd_malloc(size_t size);
-void *dd_calloc(size_t nmemb, size_t size);
 void dd_set_global_constants(void);
 void dd_free_global_constants(void);  /* 094d */
 

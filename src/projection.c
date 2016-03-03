@@ -92,11 +92,25 @@ int main(int argc, char *argv[])
   set_initialize(&delset, d);
 
   printf("How many variables to elminate? (max %ld): ",d-1);
-  scanf("%ld",&s);
+  int rc = 0;
+  while (rc != 1) {
+    rc = scanf("%ld",&s);
+    if (rc == EOF) {
+      perror("scanf");
+      exit(EXIT_FAILURE);
+    }
+  }
 
   for (j=1; j<=s; j++){
     printf("\n%ld th deletion variable): ",j);
-    scanf("%ld",&t);
+    rc = 0;
+    while (rc != 1) {
+      rc = scanf("%ld",&t);
+      if (rc == EOF) {
+        perror("scanf");
+        exit(EXIT_FAILURE);
+      }
+    }
     set_addelem(delset, t+1);
   }
   

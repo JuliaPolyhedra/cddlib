@@ -13,6 +13,7 @@
 
 #include "setoper.h"  /* set operation library header (Ver. June 1, 2000 or later) */
 #include "cdd_f.h"
+#include "cddstd_f.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -46,7 +47,7 @@ ddf_MatrixPtr ddf_BlockElimination(ddf_MatrixPtr M, ddf_colset delset, ddf_Error
   *error=ddf_NoError;
   m= M->rowsize;
   d= M->colsize;
-  delindex=(long*)calloc(d+1,sizeof(long));
+  delindex=(long*)ddf_calloc(d+1,sizeof(long));
   ddf_init(temp);
   ddf_init(prod);
 
@@ -160,9 +161,9 @@ ddf_MatrixPtr ddf_FourierElimination(ddf_MatrixPtr M,ddf_ErrorType *error)
   }
 
   /* Create temporary spaces to be removed at the end of this function */
-  posrowindex=(long*)calloc(m+1,sizeof(long));
-  negrowindex=(long*)calloc(m+1,sizeof(long));
-  zerorowindex=(long*)calloc(m+1,sizeof(long));
+  posrowindex=(long*)ddf_calloc(m+1,sizeof(long));
+  negrowindex=(long*)ddf_calloc(m+1,sizeof(long));
+  zerorowindex=(long*)ddf_calloc(m+1,sizeof(long));
   ddf_init(temp1);
   ddf_init(temp2);
 

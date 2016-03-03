@@ -12,6 +12,7 @@
 
 #include "setoper.h"  /* set operation library header (Ver. June 1, 2000 or later) */
 #include "cdd.h"
+#include "cddstd.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -32,7 +33,7 @@ void dd_SetInputFile(FILE **f,dd_DataFileType inputfile,dd_ErrorType *Error)
   *Error=dd_NoError;
   while (!opened && !quit) {
     fprintf(stderr,"\n>> Input file: ");
-    scanf("%s",inputfile);
+    dd_scanf(1, "%s", inputfile);
     ch=getchar();
     stop=dd_FALSE;
     for (i=0; i<dd_filenamelen && !stop; i++){
@@ -176,7 +177,7 @@ void dd_ProcessCommandLine(FILE *f, dd_MatrixPtr M, const char *line)
   if (strncmp(line, "partial_enum", 12)==0 ||
        strncmp(line, "equality", 8)==0  ||
        strncmp(line, "linearity", 9)==0 ) {
-    fgets(newline,dd_linelenmax,f);
+    dd_fgets(newline,f);
     dd_SetLinearity(M,newline);
   }
   if (strncmp(line, "maximize", 8)==0 ||
@@ -187,7 +188,7 @@ void dd_ProcessCommandLine(FILE *f, dd_MatrixPtr M, const char *line)
     if (M->numbtype==dd_Real) {
 #if !defined(GMPRATIONAL)
         double rvalue;
-        fscanf(f, "%lf", &rvalue);
+        dd_fscanf(f, 0, 1, "%lf", &rvalue);
         dd_set_d(value, rvalue);
 #endif
       } else {
@@ -912,7 +913,7 @@ dd_MatrixPtr dd_PolyFile2Matrix (FILE *f, dd_ErrorType *Error)
   (*Error)=dd_NoError;
   while (!found)
   {
-    if (fscanf(f,"%s",command)==EOF) {
+    if (dd_fscanf(f,1,1,"%s",command)==EOF) {
       (*Error)=dd_ImproperInputFormat;
       goto _L99;
     }
@@ -927,12 +928,12 @@ dd_MatrixPtr dd_PolyFile2Matrix (FILE *f, dd_ErrorType *Error)
           strncmp(command, "equality", 8)==0  ||
           strncmp(command, "linearity", 9)==0 ) {
         linearity=dd_TRUE;
-        fgets(comsave,dd_linelenmax,f);
+        dd_fgets(comsave,f);
       }
       if (strncmp(command, "begin", 5)==0) found=dd_TRUE;
     }
   }
-  fscanf(f, "%ld %ld %s", &m_input, &d_input, numbtype);
+  dd_fscanf(f, 0, 3, "%ld %ld %s", &m_input, &d_input, numbtype);
   fprintf(stderr,"size = %ld x %ld\nNumber Type = %s\n", m_input, d_input, numbtype);
   NT=dd_GetNumberType(numbtype);
   if (NT==dd_Unknown) {
@@ -950,7 +951,7 @@ dd_MatrixPtr dd_PolyFile2Matrix (FILE *f, dd_ErrorType *Error)
         *Error=dd_NoRealNumberSupport;
         goto _L99;
 #else
-        fscanf(f, "%lf", &rvalue);
+        dd_fscanf(f, 0, 1, "%lf", &rvalue);
         dd_set_d(value, rvalue);
 #endif
       } else {
@@ -975,9 +976,9 @@ dd_MatrixPtr dd_PolyFile2Matrix (FILE *f, dd_ErrorType *Error)
     dd_SetLinearity(M,comsave);
   }
   while (!feof(f)) {
-    fscanf(f,"%s", command);
+    dd_fscanf(f, 0, 1, "%s", command);
     dd_ProcessCommandLine(f, M, command);
-    fgets(command,dd_linelenmax,f); /* skip the CR/LF */
+    dd_fgets(command,f); /* skip the CR/LF */
   }
 
 _L99: ;
@@ -1949,9 +1950,9 @@ void dd_sread_rational_value (const char *s, mytype value)
    /* reads a rational value from the specified string "s" and assigns it to "value"    */
 
 {
-   char     *numerator_s=NULL, *denominator_s=NULL, *position;
-   int      sign = 1;
-   double   numerator, denominator;
+   char  *numerator_s=NULL, *denominator_s=NULL, *position;
+   int    sign = 1;
+   double numerator, denominator;
 #if defined GMPRATIONAL
    mpz_t znum, zden;
 #else
@@ -1959,7 +1960,8 @@ void dd_sread_rational_value (const char *s, mytype value)
 #endif
 
    /* determine the sign of the number */
-   numerator_s = s;
+   /* Need to modify it to replace the '/' by '\0' to end the numerator string, so drop the const qualifier */
+   numerator_s = (char *) s;
    if (s [0] == '-')
    {  sign = -1;
       numerator_s++;
@@ -2022,7 +2024,7 @@ void dd_fread_rational_value (FILE *f, mytype value)
    mytype rational_value;
 
    dd_init(rational_value);
-   fscanf(f, "%s ", number_s);
+   dd_fscanf(f, 0, 1, "%s ", number_s);
    dd_sread_rational_value (number_s, rational_value);
    dd_set(value,rational_value);
    dd_clear(rational_value);

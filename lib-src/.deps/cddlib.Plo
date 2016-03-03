@@ -29,7 +29,7 @@ cddlib.lo: cddlib.c /usr/include/stdc-predef.h setoper.h \
  /usr/include/x86_64-linux-gnu/bits/stdlib-bsearch.h \
  /usr/include/x86_64-linux-gnu/bits/stdlib-float.h \
  /usr/include/x86_64-linux-gnu/bits/stdlib.h cdd.h cddmp.h cddtypes.h \
- /usr/include/xlocale.h /usr/include/math.h \
+ /usr/include/xlocale.h cddstd.h /usr/include/math.h \
  /usr/include/x86_64-linux-gnu/bits/huge_val.h \
  /usr/include/x86_64-linux-gnu/bits/huge_valf.h \
  /usr/include/x86_64-linux-gnu/bits/huge_vall.h \
@@ -127,6 +127,8 @@ cddmp.h:
 cddtypes.h:
 
 /usr/include/xlocale.h:
+
+cddstd.h:
 
 /usr/include/math.h:
 

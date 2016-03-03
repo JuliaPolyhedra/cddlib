@@ -1,6 +1,7 @@
 lib_LTLIBRARIES = libcdd.la
 
 libcdd_la_SOURCES = \
+cddstd.c \
 cddcore.c \
 cddlp.c	\
 cddmp.c \
@@ -10,6 +11,7 @@ cddproj.c \
 setoper.c
 
 include_HEADERS = \
+cddstd.h \
 cdd.h \
 cddmp.h \
 cddtypes.h \

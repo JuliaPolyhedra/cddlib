@@ -35,6 +35,7 @@
 #include "setoper.h"
   /* set operation library header (Ver. June 1, 2000 or later) */
 #include "cdd_f.h"
+#include "cddstd_f.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -158,8 +159,8 @@ void ddf_InitialDataSetup(ddf_ConePtr cone)
     }
     free(Vector1); free(Vector2);
     }
-    Vector1=(myfloat*)calloc(cone->d,sizeof(myfloat));
-    Vector2=(myfloat*)calloc(cone->d,sizeof(myfloat));
+    Vector1=(myfloat*)ddf_calloc(cone->d,sizeof(myfloat));
+    Vector2=(myfloat*)ddf_calloc(cone->d,sizeof(myfloat));
     for (j=0; j<cone->d; j++){
       ddf_init(Vector1[j]);
       ddf_init(Vector2[j]);

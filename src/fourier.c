@@ -91,8 +91,15 @@ int main(int argc, char *argv[])
   M2=dd_CopyMatrix(M);
 
   printf("How many variables to elminate? (max %ld): ",d-1);
-  scanf("%ld",&s);
-  
+  int rc = 0;
+  while (rc != 1) {
+    rc = scanf("%ld",&s);
+    if (rc == EOF) {
+      perror("scanf");
+      exit(EXIT_FAILURE);
+    }
+  }
+
   if (s>0 && s < d){
     for (j=1; j<=s; j++){
       M1=dd_FourierElimination(M2, &err);

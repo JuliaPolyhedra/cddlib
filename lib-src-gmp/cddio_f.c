@@ -13,6 +13,7 @@
 
 #include "setoper.h"  /* set operation library header (Ver. June 1, 2000 or later) */
 #include "cdd_f.h"
+#include "cddstd_f.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -33,7 +34,7 @@ void ddf_SetInputFile(FILE **f,ddf_DataFileType inputfile,ddf_ErrorType *Error)
   *Error=ddf_NoError;
   while (!opened && !quit) {
     fprintf(stderr,"\n>> Input file: ");
-    scanf("%s",inputfile);
+    ddf_scanf(1, "%s", inputfile);
     ch=getchar();
     stop=ddf_FALSE;
     for (i=0; i<ddf_filenamelen && !stop; i++){
@@ -44,7 +45,7 @@ void ddf_SetInputFile(FILE **f,ddf_DataFileType inputfile,ddf_ErrorType *Error)
           break;
         case ';':  case ' ':  case '\0':  case '\n':  case '\t':
           stop=ddf_TRUE;
-          tempname=(char*)calloc(ddf_filenamelen,sizeof(ch));
+          tempname=(char*)ddf_calloc(ddf_filenamelen,sizeof(ch));
           strncpy(tempname,inputfile,i);
           strcpy(inputfile,tempname);
           free(tempname);
@@ -177,7 +178,7 @@ void ddf_ProcessCommandLine(FILE *f, ddf_MatrixPtr M, const char *line)
   if (strncmp(line, "partial_enum", 12)==0 ||
        strncmp(line, "equality", 8)==0  ||
        strncmp(line, "linearity", 9)==0 ) {
-    fgets(newline,ddf_linelenmax,f);
+    ddf_fgets(newline,f);
     ddf_SetLinearity(M,newline);
   }
   if (strncmp(line, "maximize", 8)==0 ||
@@ -188,7 +189,7 @@ void ddf_ProcessCommandLine(FILE *f, ddf_MatrixPtr M, const char *line)
     if (M->numbtype==ddf_Real) {
 #if !defined(ddf_GMPRATIONAL)
         double rvalue;
-        fscanf(f, "%lf", &rvalue);
+        ddf_fscanf(f, 0, 1, "%lf", &rvalue);
         ddf_set_d(value, rvalue);
 #endif
       } else {
@@ -313,8 +314,8 @@ ddf_MatrixPtr ddf_MatrixNormalizedSortedCopy(ddf_MatrixPtr M,ddf_rowindex *newpo
   /* if (newpos!=NULL) free(newpos); */
   m= M->rowsize;
   d= M->colsize;
-  roworder=(long *)calloc(m+1,sizeof(long));
-  *newpos=(long *)calloc(m+1,sizeof(long));
+  roworder=(long *)ddf_calloc(m+1,sizeof(long));
+  *newpos=(long *)ddf_calloc(m+1,sizeof(long));
   if (m >=0 && d >=0){
     Mnorm=ddf_MatrixNormalizedCopy(M);
     Mcopy=ddf_CreateMatrix(m, d);
@@ -357,7 +358,7 @@ ddf_MatrixPtr ddf_MatrixUniqueCopy(ddf_MatrixPtr M,ddf_rowindex *newpos)
   m= M->rowsize;
   d= M->colsize;
   preferredrows=M->linset;
-  roworder=(long *)calloc(m+1,sizeof(long));
+  roworder=(long *)ddf_calloc(m+1,sizeof(long));
   if (m >=0 && d >=0){
     for(i=1; i<=m; i++) roworder[i]=i;
     ddf_UniqueRows(roworder, 1, m, M->matrix, d,preferredrows, &uniqrows);
@@ -394,8 +395,8 @@ ddf_MatrixPtr ddf_MatrixNormalizedSortedUniqueCopy(ddf_MatrixPtr M,ddf_rowindex 
   /* if (newpos!=NULL) free(newpos); */
   m= M->rowsize;
   d= M->colsize;
-  *newpos=(long *)calloc(m+1,sizeof(long));
-  newpos1r=(long *)calloc(m+1,sizeof(long));
+  *newpos=(long *)ddf_calloc(m+1,sizeof(long));
+  newpos1r=(long *)ddf_calloc(m+1,sizeof(long));
   if (m>=0 && d>=0){
     M1=ddf_MatrixNormalizedSortedCopy(M,&newpos1);
     for (i=1; i<=m;i++) newpos1r[newpos1[i]]=i;  /* reverse of newpos1 */
@@ -429,8 +430,8 @@ ddf_MatrixPtr ddf_MatrixSortedUniqueCopy(ddf_MatrixPtr M,ddf_rowindex *newpos)  
   /* if (newpos!=NULL) free(newpos); */
   m= M->rowsize;
   d= M->colsize;
-  *newpos=(long *)calloc(m+1,sizeof(long));
-  newpos1r=(long *)calloc(m+1,sizeof(long));
+  *newpos=(long *)ddf_calloc(m+1,sizeof(long));
+  newpos1r=(long *)ddf_calloc(m+1,sizeof(long));
   if (m>=0 && d>=0){
     M1=ddf_MatrixNormalizedSortedCopy(M,&newpos1);
     for (i=1; i<=m;i++) newpos1r[newpos1[i]]=i;  /* reverse of newpos1 */
@@ -505,6 +506,16 @@ int ddf_MatrixAppendTo(ddf_MatrixPtr *M1, ddf_MatrixPtr M2)
     success=1;
   }
   return success;
+  /*
+  ddf_boolean success=0;
+  ddf_MatrixPtr M = ddf_MatrixAppend(*M1, M2);
+  if (M != NULL) {
+    ddf_FreeMatrix(*M1);
+    *M1=M;
+    success=1;
+  }
+  return success;
+  */
 }
 
 int ddf_MatrixRowRemove(ddf_MatrixPtr *M, ddf_rowrange r) /* 092 */
@@ -544,7 +555,7 @@ int ddf_MatrixRowRemove2(ddf_MatrixPtr *M, ddf_rowrange r, ddf_rowindex *newpos)
   d=(*M)->colsize;
 
   if (r >= 1 && r <=m){
-    roworder=(long *)calloc(m+1,sizeof(long));
+    roworder=(long *)ddf_calloc(m+1,sizeof(long));
     (*M)->rowsize=m-1;
     ddf_FreeArow(d, (*M)->matrix[r-1]);
     set_delelem((*M)->linset,r);
@@ -610,7 +621,7 @@ ddf_MatrixPtr ddf_MatrixSubmatrix2(ddf_MatrixPtr M, ddf_rowset delset,ddf_rowind
   d= M->colsize;
   msub=m;
   if (m >=0 && d >=0){
-    roworder=(long *)calloc(m+1,sizeof(long));
+    roworder=(long *)ddf_calloc(m+1,sizeof(long));
     for (i=1; i<=m; i++) {
        if (set_member(i,delset)) msub-=1;
     }
@@ -650,7 +661,7 @@ ddf_MatrixPtr ddf_MatrixSubmatrix2L(ddf_MatrixPtr M, ddf_rowset delset,ddf_rowin
   d= M->colsize;
   msub=m;
   if (m >=0 && d >=0){
-    roworder=(long *)calloc(m+1,sizeof(long));
+    roworder=(long *)ddf_calloc(m+1,sizeof(long));
     for (i=1; i<=m; i++) {
        if (set_member(i,delset)) msub-=1;
     }
@@ -727,7 +738,7 @@ ddf_PolyhedraPtr ddf_CreatePolyhedraData(ddf_rowrange m, ddf_colrange d)
   ddf_rowrange i;
   ddf_PolyhedraPtr poly=NULL;
 
-  poly=(ddf_PolyhedraPtr) malloc (sizeof(ddf_PolyhedraType));
+  poly=(ddf_PolyhedraPtr) ddf_malloc (sizeof(ddf_PolyhedraType));
   poly->child       =NULL; /* this links the homogenized cone data */
   poly->m           =m;
   poly->d           =d;
@@ -741,7 +752,7 @@ ddf_PolyhedraPtr ddf_CreatePolyhedraData(ddf_rowrange m, ddf_colrange d)
   poly->representation       =ddf_Inequality;
   poly->homogeneous =ddf_FALSE;
 
-  poly->EqualityIndex=(int *)calloc(m+2, sizeof(int));
+  poly->EqualityIndex=(int *)ddf_calloc(m+2, sizeof(int));
     /* size increased to m+2 in 092b because it is used by the child cone,
        This is a bug fix suggested by Thao Dang. */
     /* ith component is 1 if it is equality, -1 if it is strict inequality, 0 otherwise. */
@@ -764,7 +775,7 @@ ddf_boolean ddf_InitializeConeData(ddf_rowrange m, ddf_colrange d, ddf_ConePtr *
   ddf_boolean success=ddf_TRUE;
   ddf_colrange j;
 
-  (*cone)=(ddf_ConePtr)calloc(1, sizeof(ddf_ConeType));
+  (*cone)=(ddf_ConePtr)ddf_calloc(1, sizeof(ddf_ConeType));
 
 /* INPUT: A given representation of a cone: inequality */
   (*cone)->m=m;
@@ -813,12 +824,12 @@ ddf_boolean ddf_InitializeConeData(ddf_rowrange m, ddf_colrange d, ddf_ConePtr *
   ddf_InitializeAmatrix((*cone)->m_alloc,(*cone)->d_alloc,&((*cone)->A));
 
   (*cone)->Edges
-     =(ddf_AdjacencyType**) calloc((*cone)->m_alloc,sizeof(ddf_AdjacencyType*));
+     =(ddf_AdjacencyType**) ddf_calloc((*cone)->m_alloc,sizeof(ddf_AdjacencyType*));
   for (j=0; j<(*cone)->m_alloc; j++) (*cone)->Edges[j]=NULL; /* 094h */
-  (*cone)->InitialRayIndex=(long*)calloc(d+1,sizeof(long));
-  (*cone)->OrderVector=(long*)calloc((*cone)->m_alloc+1,sizeof(long));
+  (*cone)->InitialRayIndex=(long*)ddf_calloc(d+1,sizeof(long));
+  (*cone)->OrderVector=(long*)ddf_calloc((*cone)->m_alloc+1,sizeof(long));
 
-  (*cone)->newcol=(long*)calloc(((*cone)->d)+1,sizeof(long));
+  (*cone)->newcol=(long*)ddf_calloc(((*cone)->d)+1,sizeof(long));
   for (j=0; j<=(*cone)->d; j++) (*cone)->newcol[j]=j;  /* identity map, initially */
   (*cone)->LinearityDim = -2; /* -2 if it is not computed */
   (*cone)->ColReduced   = ddf_FALSE;
@@ -903,7 +914,7 @@ ddf_MatrixPtr ddf_PolyFile2Matrix (FILE *f, ddf_ErrorType *Error)
   (*Error)=ddf_NoError;
   while (!found)
   {
-    if (fscanf(f,"%s",command)==EOF) {
+    if (ddf_fscanf(f,1,1,"%s",command)==EOF) {
       (*Error)=ddf_ImproperInputFormat;
       goto _L99;
     }
@@ -918,12 +929,12 @@ ddf_MatrixPtr ddf_PolyFile2Matrix (FILE *f, ddf_ErrorType *Error)
           strncmp(command, "equality", 8)==0  ||
           strncmp(command, "linearity", 9)==0 ) {
         linearity=ddf_TRUE;
-        fgets(comsave,ddf_linelenmax,f);
+        ddf_fgets(comsave,f);
       }
       if (strncmp(command, "begin", 5)==0) found=ddf_TRUE;
     }
   }
-  fscanf(f, "%ld %ld %s", &m_input, &d_input, numbtype);
+  ddf_fscanf(f, 0, 3, "%ld %ld %s", &m_input, &d_input, numbtype);
   fprintf(stderr,"size = %ld x %ld\nNumber Type = %s\n", m_input, d_input, numbtype);
   NT=ddf_GetNumberType(numbtype);
   if (NT==ddf_Unknown) {
@@ -941,7 +952,7 @@ ddf_MatrixPtr ddf_PolyFile2Matrix (FILE *f, ddf_ErrorType *Error)
         *Error=ddf_NoRealNumberSupport;
         goto _L99;
 #else
-        fscanf(f, "%lf", &rvalue);
+        ddf_fscanf(f, 0, 1, "%lf", &rvalue);
         ddf_set_d(value, rvalue);
 #endif
       } else {
@@ -966,9 +977,9 @@ ddf_MatrixPtr ddf_PolyFile2Matrix (FILE *f, ddf_ErrorType *Error)
     ddf_SetLinearity(M,comsave);
   }
   while (!feof(f)) {
-    fscanf(f,"%s", command);
+    ddf_fscanf(f, 0, 1, "%s", command);
     ddf_ProcessCommandLine(f, M, command);
-    fgets(command,ddf_linelenmax,f); /* skip the CR/LF */
+    ddf_fgets(command,f); /* skip the CR/LF */
   }
 
 _L99: ;
@@ -1345,7 +1356,7 @@ void ddf_ComputeAinc(ddf_PolyhedraPtr poly)
       !(poly->homogeneous) && poly->representation==Inequality,
       it is poly->m+1.   See ddf_ConeDataLoad.
    */
-  poly->Ainc=(set_type*)calloc(m1, sizeof(set_type));
+  poly->Ainc=(set_type*)ddf_calloc(m1, sizeof(set_type));
   for(i=1; i<=m1; i++) set_initialize(&(poly->Ainc[i-1]),poly->n);
   set_initialize(&(poly->Ared), m1);
   set_initialize(&(poly->Adom), m1);
@@ -1940,9 +1951,9 @@ void ddf_sread_rational_value (const char *s, myfloat value)
    /* reads a rational value from the specified string "s" and assigns it to "value"    */
 
 {
-   char     *numerator_s=NULL, *denominator_s=NULL, *position;
-   int      sign = 1;
-   double   numerator, denominator;
+   char  *numerator_s=NULL, *denominator_s=NULL, *position;
+   int    sign = 1;
+   double numerator, denominator;
 #if defined ddf_GMPRATIONAL
    mpz_t znum, zden;
 #else
@@ -1950,7 +1961,8 @@ void ddf_sread_rational_value (const char *s, myfloat value)
 #endif
 
    /* determine the sign of the number */
-   numerator_s = s;
+   /* Need to modify it to replace the '/' by '\0' to end the numerator string, so drop the const qualifier */
+   numerator_s = (char *) s;
    if (s [0] == '-')
    {  sign = -1;
       numerator_s++;
@@ -2013,7 +2025,7 @@ void ddf_fread_rational_value (FILE *f, myfloat value)
    myfloat rational_value;
 
    ddf_init(rational_value);
-   fscanf(f, "%s ", number_s);
+   ddf_fscanf(f, 0, 1, "%s ", number_s);
    ddf_sread_rational_value (number_s, rational_value);
    ddf_set(value,rational_value);
    ddf_clear(rational_value);

@@ -16,6 +16,8 @@
 
 #define dd_COPYRIGHT   "Copyright (C) 1996, Komei Fukuda, fukuda@ifor.math.ethz.ch"
 #define dd_DDVERSION   "Version 0.94g (March 23, 2012)"
+#include "setoper.h"
+#include "cddmp.h"
 #include <time.h>
 
 #define dd_wordlenmax    1024
