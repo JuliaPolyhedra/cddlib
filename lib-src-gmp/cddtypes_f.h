@@ -13,7 +13,6 @@
 
 #ifndef  _CDDTYPES_HF
 #define  _CDDTYPES_HF
-#endif  /* _CDDTYPES_HF */
 
 #define ddf_COPYRIGHT   "Copyright (C) 1996, Komei Fukuda, fukuda@ifor.math.ethz.ch"
 #define ddf_DDVERSION   "Version 0.94g (March 23, 2012)"
@@ -331,4 +330,5 @@ typedef struct ddf_conedata {
 extern ddf_boolean ddf_debug;
 extern ddf_boolean ddf_log;
 
+#endif  /* _CDDTYPES_HF */
 /* end of cddtypes.h */

@@ -21,7 +21,6 @@
 
 #ifndef  _CDDMP_HF
 #define  _CDDMP_HF
-#endif  /* _CDDMP_HF */
 
 /**********************************/
 /*         MACROS                 */
@@ -125,4 +124,5 @@ void ddf_free_global_constants(void);  /* 094d */
 }
 #endif
 
+#endif  /* _CDDMP_HF */
 /* end of  cddmp.h  */

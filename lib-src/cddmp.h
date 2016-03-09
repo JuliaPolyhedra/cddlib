@@ -20,7 +20,6 @@
 
 #ifndef  __CDDMP_H
 #define  __CDDMP_H
-#endif  /* __CDDMP_H */
 
 /**********************************/
 /*         MACROS                 */
@@ -124,4 +123,5 @@ void dd_free_global_constants(void);  /* 094d */
 }
 #endif
 
+#endif  /* __CDDMP_H */
 /* end of  cddmp.h  */

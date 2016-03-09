@@ -12,7 +12,6 @@
 
 #ifndef  __CDD_H
 #define  __CDD_H
-#endif  /* __CDD_H */
 
 #ifndef  __CDDMP_H
 #include "cddmp.h"
@@ -284,7 +283,5 @@ dd_boolean dd_InitializeConeData(dd_rowrange, dd_colrange, dd_ConePtr*);
 dd_boolean dd_AppendMatrix2Poly(dd_PolyhedraPtr*, dd_MatrixPtr);
 
 
-
-
-
+#endif  /* __CDD_H */
 /* end of cddlib.h */

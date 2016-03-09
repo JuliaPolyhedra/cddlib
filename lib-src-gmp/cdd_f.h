@@ -13,7 +13,6 @@
 
 #ifndef  __CDD_HF
 #define  __CDD_HF
-#endif  /* __CDD_HF */
 
 #ifndef  _CDDMP_HF
 #include "cddmp_f.h"
@@ -285,7 +284,5 @@ ddf_boolean ddf_InitializeConeData(ddf_rowrange, ddf_colrange, ddf_ConePtr*);
 ddf_boolean ddf_AppendMatrix2Poly(ddf_PolyhedraPtr*, ddf_MatrixPtr);
 
 
-
-
-
+#endif  /* __CDD_HF */
 /* end of cddlib.h */

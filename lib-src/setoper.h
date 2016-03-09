@@ -8,7 +8,6 @@
 
 #ifndef  __SETOPER_H
 #define  __SETOPER_H
-#endif  /* __SETOPER_H */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -46,5 +45,5 @@ void set_fbinwrite(FILE *f,set_type set);
 }
 #endif
 
+#endif  /* __SETOPER_H */
 /* End of File: setoper.h */
-
