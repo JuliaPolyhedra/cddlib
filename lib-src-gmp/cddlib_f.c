@@ -115,8 +115,9 @@ void ddf_DDMain(ddf_ConePtr cone)
       set_addelem(cone->WeaklyAddedHalfspaces, hh);
     }
     if (!cone->PreOrderedRun){
-      for (itemp=1; cone->OrderVector[itemp]!=hh; itemp++);
-        otemp=cone->OrderVector[cone->Iteration];
+      for (itemp=1; cone->OrderVector[itemp]!=hh; itemp++)
+        ;
+      otemp=cone->OrderVector[cone->Iteration];
       cone->OrderVector[cone->Iteration]=hh;
         /* store the dynamic ordering in ordervec */
       cone->OrderVector[itemp]=otemp;
