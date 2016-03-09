@@ -174,11 +174,9 @@ void dd_StoreRay2(dd_ConePtr cone, mytype *p,
   dd_rowrange i,k,fii=cone->m+1;
   dd_colrange j;
   mytype temp;
-  dd_boolean localdebug=dd_debug;
 
   dd_init(temp);
   RR=cone->LastRay;
-  if (dd_debug) localdebug=dd_TRUE;
   *feasible = dd_TRUE;
   *weaklyfeasible = dd_TRUE;
   set_initialize(&(RR->ZeroSet),cone->m);
@@ -581,20 +579,20 @@ void dd_FreePolyhedra(dd_PolyhedraPtr poly)
 
 void dd_Normalize(dd_colrange d_size, mytype *V)
 {
-  long j,jmin=0;
+  long j;
   mytype temp,min;
   dd_boolean nonzerofound=dd_FALSE;
 
   if (d_size>0){
     dd_init(min);  dd_init(temp);
-    dd_abs(min,V[0]);  jmin=0; /* set the minmizer to 0 */
+    dd_abs(min,V[0]); /* set the minmizer to 0 */
     if (dd_Positive(min)) nonzerofound=dd_TRUE;
     for (j = 1; j < d_size; j++) {
       dd_abs(temp,V[j]);
       if (dd_Positive(temp)){
         if (!nonzerofound || dd_Smaller(temp,min)){
           nonzerofound=dd_TRUE;
-          dd_set(min, temp);  jmin=j;
+          dd_set(min, temp);
         }
       }
     }
@@ -694,10 +692,9 @@ void dd_PermuteCopyAmatrix(mytype **Acopy, mytype **A, dd_rowrange m, dd_colrang
 void dd_PermutePartialCopyAmatrix(mytype **Acopy, mytype **A, dd_rowrange m, dd_colrange d, dd_rowindex roworder,dd_rowrange p, dd_rowrange q)
 {
  /* copy the rows of A whose roworder is positive.  roworder[i] is the row index of the copied row. */
-  dd_rowrange i,k;
+  dd_rowrange i;
 
-  k=0;
-  for (i = 1; i<= m; i++) {
+  for (i = 1; i <= m; i++) {
     if (roworder[i]>0) dd_CopyArow(Acopy[roworder[i]-1],A[i-1],d);
   }
 }
