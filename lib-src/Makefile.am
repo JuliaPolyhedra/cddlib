@@ -22,4 +22,4 @@ AM_CPPFLAGS = -UGMPRATIONAL
 # if -DGMPRATIONAL is in CPPFLAGS it is not removed.
 # However, AM_CFLAGS is added after CFLAGS so it has an effect
 AM_CFLAGS   = -UGMPRATIONAL
-AM_LDFLAGS = -version-info 0:0:0
+AM_LDFLAGS = -version-info 0:0:0 -no-undefined

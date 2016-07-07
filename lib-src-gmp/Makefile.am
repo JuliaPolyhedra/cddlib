@@ -29,4 +29,4 @@ cddtypes_f.h \
 setoper.h
 
 AM_CPPFLAGS = -I$(gmpincludedir) -DGMPRATIONAL
-AM_LDFLAGS = -version-info 0:0:0
+AM_LDFLAGS = -version-info 0:0:0 -no-undefined
